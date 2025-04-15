@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🌐 Graph Algorithm Visualization Web
 
-## Getting Started
+Welcome to **Graph Algorithm Visualization Web** – an interactive and educational platform designed to help users visually understand how various graph algorithms work step-by-step.
 
-First, run the development server:
+This project is perfect for students, developers, and computer science enthusiasts who want to **learn, explore, and visualize graph-based algorithms** in a clear and intuitive way.
+
+---
+
+## 🚀 Live Demo
+
+🔗 [Visit the Web App](#) *([Add your live link here when deployed](https://v0-ai-project-cocwfk.vercel.app/))*
+
+---
+
+## 🧠 Features
+
+- ✨ **Interactive Visualizations** of classic graph algorithms
+- 📚 Educational descriptions for each algorithm
+- 🧭 Step-by-step animation of graph traversal and pathfinding
+- 🎯 User-friendly interface for building and modifying graphs
+- 🖱️ Drag-and-drop graph nodes and edges
+- 🔁 Reset and re-run algorithms in real-time
+
+---
+
+## 🧩 Algorithms Included
+
+### 🔍 **Pathfinding**
+- **A\*** – Best-first search using cost + heuristic.
+- **Dijkstra's Algorithm** – Finds the shortest path in a weighted graph.
+
+### 🔄 **Traversal**
+- **Breadth-First Search (BFS)** – Explores layer by layer.
+- **Depth-First Search (DFS)** – Explores depth before breadth.
+
+### 🌲 **Spanning Tree**
+- **Prim's Minimum Spanning Tree (MST)** – Connects all nodes with the minimal total edge weight.
+
+### 🎨 **Coloring**
+- **Graph Coloring** – Assigns colors to nodes such that no adjacent nodes share the same color.
+
+---
+
+## 📷 Screenshots
+
+_Add screenshots or GIFs of your visualizations here to show what users can expect!_
+
+---
+
+## ⚙️ Tech Stack
+
+- **Frontend:** HTML, CSS, JavaScript / React (if applicable)
+- **Visualization:** Canvas / SVG / D3.js (or your chosen tech)
+- **Algorithms:** Pure JS logic for graph algorithms
+
+---
+
+## 📁 Folder Structure
+
+Graph-Algorithm-Visualization-Web/ ├── public/ ├── src/ │ ├── components/ │ ├── algorithms/ │ ├── styles/ │ └── App.js ├── package.json └── README.md
+
+
+---
+
+## 🛠️ How to Run Locally
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+git clone https://github.com/yourusername/Graph-Algorithm-Visualization-Web.git
+cd Graph-Algorithm-Visualization-Web
+npm install
+npm run dev  # or npm start
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+📌 Future Improvements
+🧠 Add more algorithms (e.g., Kruskal’s MST, Bellman-Ford)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+💡 Theme switcher (dark/light mode)
 
-## Learn More
+💬 User comments or algorithm tips
 
-To learn more about Next.js, take a look at the following resources:
+🧪 Unit tests for algorithm correctness
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+🙌 Acknowledgments
+Inspired by visual algorithm tools like:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Pathfinding Visualizer by Clement Mihailescu
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+VisuAlgo.net
