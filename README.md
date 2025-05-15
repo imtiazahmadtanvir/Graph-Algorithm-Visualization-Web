@@ -49,7 +49,8 @@ _Add screenshots or GIFs of your visualizations here to show what users can expe
 
 ## ⚙️ Tech Stack
 
-- **Frontend:** HTML, CSS, JavaScript / React (if applicable)
+
+- **Frontend:** HTML, CSS, Next js, TypeScript
 - **Visualization:** Canvas / SVG / D3.js (or your chosen tech)
 - **Algorithms:** Pure JS logic for graph algorithms
 
