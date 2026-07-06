@@ -1153,34 +1153,34 @@ function getHighlightedLines(algorithmName: string, step: any, language: string)
   
   if (language === "python") {
     if (algorithmName === "bfs") {
-      if (step.path) return [9];
+      if (step.path) return [10];
       if (step.visited !== undefined && step.current !== undefined) return [2, 3, 4];
-      if (step.current !== undefined) return [6, 8];
-      if (step.visited !== undefined) return [11, 12, 14];
+      if (step.current !== undefined) return [6, 7, 9];
+      if (step.visited !== undefined) return [13, 14, 15, 16];
     }
     if (algorithmName === "dfs") {
-      if (step.path) return [23];
-      if (step.visited !== undefined && step.current !== undefined) return [22];
-      if (step.current !== undefined) return [5, 6, 9];
-      if (step.visited !== undefined) return [11, 12];
+      if (step.path) return [21];
+      if (step.visited !== undefined && step.current !== undefined) return [20];
+      if (step.current !== undefined) return [5, 6, 7, 9];
+      if (step.visited !== undefined) return [13, 14];
     }
     if (algorithmName === "astar") {
-      if (step.path) return [17];
+      if (step.path) return [18];
       if (step.visited !== undefined && step.current !== undefined) return [9, 10];
-      if (step.current !== undefined) return [13, 14, 16];
-      if (step.visited !== undefined) return [21, 24, 27];
+      if (step.current !== undefined) return [14, 15, 17];
+      if (step.visited !== undefined) return [22, 25, 28];
     }
     if (algorithmName === "dijkstra") {
       if (step.path) return [20];
-      if (step.visited !== undefined && step.current !== undefined) return [7, 8, 10];
-      if (step.current !== undefined) return [13, 14, 17, 19];
-      if (step.visited !== undefined) return [22, 25, 27, 31];
+      if (step.visited !== undefined && step.current !== undefined) return [7, 8, 9];
+      if (step.current !== undefined) return [13, 14, 16, 17, 19];
+      if (step.visited !== undefined) return [22, 25, 28, 31];
     }
     if (algorithmName === "graph-coloring") {
-      if (step.nodeColor) return [9, 15, 19];
+      if (step.nodeColor) return [9, 15, 18];
     }
     if (algorithmName === "prims") {
-      if (step.mst) return [26];
+      if (step.mst) return [25];
       if (step.visited !== undefined && step.current !== undefined) return [2, 3];
       if (step.current !== undefined) return [10, 13, 16];
       if (step.visited !== undefined) return [22, 23];
@@ -1213,7 +1213,7 @@ function getHighlightedLines(algorithmName: string, step: any, language: string)
     if (step.path) return [21];
     if (step.visited !== undefined && step.current !== undefined) return [7, 8, 10];
     if (step.current !== undefined) return [14, 15, 18, 20];
-    if (step.visited !== undefined) return [24, 27, 29, 33];
+    if (step.visited !== undefined) return [24, 27, 29, 32];
   }
   
   if (algorithmName === "graph-coloring") {
@@ -1280,11 +1280,17 @@ function getStepExplanation(algorithmName: string, step: any): string {
 }
 
 function highlightJS(line: string) {
-  if (line.trim().startsWith("//")) {
+  const trimmedLine = line.trim();
+  if (trimmedLine.startsWith("//") || trimmedLine.startsWith("#")) {
     return <span className="text-emerald-500 font-normal">{line}</span>;
   }
 
-  const keywords = ["const", "let", "function", "while", "for", "if", "else", "return", "break", "continue", "class", "new", "Set", "Map", "Record", "Infinity"];
+  const keywords = [
+    "const", "let", "function", "while", "for", "if", "else", "return", "break", "continue", "class", "new", "Set", "Map", "Record", "Infinity",
+    "def", "elif", "in", "import", "from", "None", "True", "False", "lambda", "float",
+    "int", "double", "vector", "queue", "priority_queue", "unordered_set", "unordered_map", "pair", "nullptr", "void", "string",
+    "public", "private", "using", "namespace", "std", "List", "HashMap", "HashSet", "ArrayList", "Queue", "LinkedList", "PriorityQueue"
+  ];
   const tokens = line.split(/(\s+|\(|\)|\{|\}|\[|\]|;|,|\.|\+|-|\*|\/|=|<|>|!|&|\|)/);
   
   return (
@@ -1292,7 +1298,7 @@ function highlightJS(line: string) {
       {tokens.map((token, idx) => {
         const trimmed = token.trim();
         if (keywords.includes(trimmed)) {
-          if (["if", "else", "return", "break", "while", "for", "continue"].includes(trimmed)) {
+          if (["if", "elif", "else", "return", "break", "while", "for", "continue", "in"].includes(trimmed)) {
             return <span key={idx} className="text-[#c586c0] font-semibold">{token}</span>;
           }
           return <span key={idx} className="text-[#569cd6] font-semibold">{token}</span>;
