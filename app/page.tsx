@@ -41,7 +41,7 @@ export default function Home() {
     <>
       {/* Hero Section */}
       {/* Hero Section - Removed image */}
-      <section className="bg-[#f0f9f0] py-16 md:py-24">
+      <section className="bg-[#f0f9f0] dark:bg-[#0a1f0a] py-16 md:py-24">
         <div className="container">
           <div className="max-w-[800px] mx-auto text-center space-y-6">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">Visualize Graph Algorithms</h1>
@@ -75,7 +75,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="flex flex-col items-center text-center p-6 rounded-lg border bg-card">
-              <div className="h-12 w-12 rounded-full bg-[#f0f9f0] flex items-center justify-center mb-4">
+              <div className="h-12 w-12 rounded-full bg-[#f0f9f0] dark:bg-[#0a1f0a] flex items-center justify-center mb-4">
                 <GitGraph className="h-6 w-6 text-[#4ade80]" />
               </div>
               <h3 className="text-xl font-bold mb-2">Visual Learning</h3>
@@ -86,7 +86,7 @@ export default function Home() {
             </div>
 
             <div className="flex flex-col items-center text-center p-6 rounded-lg border bg-card">
-              <div className="h-12 w-12 rounded-full bg-[#f0f9f0] flex items-center justify-center mb-4">
+              <div className="h-12 w-12 rounded-full bg-[#f0f9f0] dark:bg-[#0a1f0a] flex items-center justify-center mb-4">
                 <GitFork className="h-6 w-6 text-[#4ade80]" />
               </div>
               <h3 className="text-xl font-bold mb-2">Step-by-Step Execution</h3>
@@ -96,7 +96,7 @@ export default function Home() {
             </div>
 
             <div className="flex flex-col items-center text-center p-6 rounded-lg border bg-card">
-              <div className="h-12 w-12 rounded-full bg-[#f0f9f0] flex items-center justify-center mb-4">
+              <div className="h-12 w-12 rounded-full bg-[#f0f9f0] dark:bg-[#0a1f0a] flex items-center justify-center mb-4">
                 <Palette className="h-6 w-6 text-[#4ade80]" />
               </div>
               <h3 className="text-xl font-bold mb-2">Customizable Graphs</h3>
@@ -109,7 +109,7 @@ export default function Home() {
       </section>
 
       {/* Algorithms Section */}
-      <section className="py-16 md:py-24 bg-[#f0f9f0]">
+      <section className="py-16 md:py-24 bg-[#f0f9f0] dark:bg-[#0a1f0a]">
         <div className="container">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Explore Algorithms</h2>
@@ -166,7 +166,7 @@ export default function Home() {
             <Card className="bg-card">
               <CardContent className="pt-6">
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="h-12 w-12 rounded-full bg-[#f0f9f0] flex items-center justify-center">
+                  <div className="h-12 w-12 rounded-full bg-[#f0f9f0] dark:bg-[#0a1f0a] flex items-center justify-center">
                     <User className="h-6 w-6 text-[#4ade80]" />
                   </div>
                   <div>
@@ -184,7 +184,7 @@ export default function Home() {
             <Card className="bg-card">
               <CardContent className="pt-6">
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="h-12 w-12 rounded-full bg-[#f0f9f0] flex items-center justify-center">
+                  <div className="h-12 w-12 rounded-full bg-[#f0f9f0] dark:bg-[#0a1f0a] flex items-center justify-center">
                     <User className="h-6 w-6 text-[#4ade80]" />
                   </div>
                   <div>
@@ -202,7 +202,7 @@ export default function Home() {
             <Card className="bg-card">
               <CardContent className="pt-6">
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="h-12 w-12 rounded-full bg-[#f0f9f0] flex items-center justify-center">
+                  <div className="h-12 w-12 rounded-full bg-[#f0f9f0] dark:bg-[#0a1f0a] flex items-center justify-center">
                     <User className="h-6 w-6 text-[#4ade80]" />
                   </div>
                   <div>
@@ -221,7 +221,7 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 md:py-24 bg-[#f0f9f0]">
+      <section className="py-16 md:py-24 bg-[#f0f9f0] dark:bg-[#0a1f0a]">
         <div className="container">
           <div className="max-w-[800px] mx-auto text-center space-y-6">
             <h2 className="text-3xl md:text-4xl font-bold">Ready to Master Graph Algorithms?</h2>

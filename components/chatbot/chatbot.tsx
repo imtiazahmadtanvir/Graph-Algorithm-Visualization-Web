@@ -330,14 +330,14 @@ export default function Chatbot() {
           </Alert>
         )}
 
-        <div className="h-full overflow-y-auto bg-green-50 pb-4">
+        <div className="h-full overflow-y-auto bg-green-50 dark:bg-gray-900 pb-4">
           <div className="p-3 sm:p-4 md:p-6 lg:p-8">
             {messages.length === 0 ? (
               <div className="flex flex-col items-center justify-center text-center text-muted-foreground p-3 sm:p-6 md:p-8 lg:p-10">
-                <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl font-medium mb-1 sm:mb-2 md:mb-3 text-green-800">
+                <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl font-medium mb-1 sm:mb-2 md:mb-3 text-green-800 dark:text-green-300">
                   Welcome to Graph-Algo Assistant
                 </h3>
-                <p className="text-sm sm:text-base md:text-lg lg:text-xl text-green-700 max-w-2xl mx-auto">
+                <p className="text-sm sm:text-base md:text-lg lg:text-xl text-green-700 dark:text-green-400 max-w-2xl mx-auto">
                   Ask me anything about Graph Algorithms !
                 </p>
                 <div className="mt-3 sm:mt-4 md:mt-6 lg:mt-8 space-y-2 md:space-y-3 w-full max-w-2xl">
@@ -346,7 +346,7 @@ export default function Chatbot() {
                       key={index}
                       variant="outline"
                       onClick={() => handlePredefinedQuestionClick(item.question)}
-                      className="bg-green-100 hover:bg-green-200 text-green-800 border-green-300 w-full text-left justify-start text-xs sm:text-sm md:text-base lg:text-lg py-2 px-3 md:py-3 md:px-4 h-auto min-h-[40px] md:min-h-[50px]"
+                      className="bg-green-100 hover:bg-green-200 dark:bg-green-900/50 dark:hover:bg-green-800/50 text-green-800 dark:text-green-200 border-green-300 dark:border-green-700 w-full text-left justify-start text-xs sm:text-sm md:text-base lg:text-lg py-2 px-3 md:py-3 md:px-4 h-auto min-h-[40px] md:min-h-[50px]"
                     >
                       {item.question}
                     </Button>
@@ -361,7 +361,7 @@ export default function Chatbot() {
                     className={cn(
                       "flex flex-col rounded-lg cursor-pointer transition-all hover:opacity-90 hover:shadow-md",
                       "p-3 sm:p-4 md:p-5",
-                      msg.role === "user" ? "ml-auto bg-green-600 text-white" : "mr-auto bg-green-100 text-green-900",
+                      msg.role === "user" ? "ml-auto bg-green-600 text-white" : "mr-auto bg-green-100 dark:bg-green-900/50 text-green-900 dark:text-green-100",
                       "max-w-[85%] sm:max-w-[80%] md:max-w-[75%] lg:max-w-[70%]",
                     )}
                     onClick={() => handleMessageClick(msg)}
@@ -373,7 +373,7 @@ export default function Chatbot() {
                       <span
                         className={cn(
                           "text-[10px] sm:text-xs md:text-sm",
-                          msg.role === "user" ? "text-green-100" : "text-green-700",
+                          msg.role === "user" ? "text-green-100" : "text-green-700 dark:text-green-400",
                         )}
                       >
                         {msg.role === "model" && (
@@ -384,7 +384,7 @@ export default function Chatbot() {
                       <span
                         className={cn(
                           "text-[10px] sm:text-xs md:text-sm",
-                          msg.role === "user" ? "text-green-100" : "text-green-700",
+                          msg.role === "user" ? "text-green-100" : "text-green-700 dark:text-green-400",
                         )}
                       >
                         {format(msg.timestamp, "h:mm a")}
@@ -394,7 +394,7 @@ export default function Chatbot() {
                 ))}
 
                 {isLoading && (
-                  <div className="flex flex-col max-w-[85%] sm:max-w-[80%] md:max-w-[75%] lg:max-w-[70%] rounded-lg p-3 sm:p-4 md:p-5 mr-auto bg-green-100 text-green-900">
+                  <div className="flex flex-col max-w-[85%] sm:max-w-[80%] md:max-w-[75%] lg:max-w-[70%] rounded-lg p-3 sm:p-4 md:p-5 mr-auto bg-green-100 dark:bg-green-900/50 text-green-900 dark:text-green-100">
                     <div className="flex items-center gap-1 sm:gap-2 md:gap-3">
                       <Loader2 className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5 animate-spin" />
                       <span className="text-sm sm:text-base md:text-lg">Thinking...</span>
@@ -404,8 +404,8 @@ export default function Chatbot() {
 
                 {/* Show remaining questions after each bot response */}
                 {showSuggestions && messages.length > 0 && messages[messages.length - 1].role === "model" && (
-                  <div className="my-3 sm:my-4 md:my-5 p-2 sm:p-3 md:p-4 bg-green-50 border border-green-200 rounded-lg max-w-4xl mx-auto">
-                    <p className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-green-800 mb-1 sm:mb-2 md:mb-3">
+                  <div className="my-3 sm:my-4 md:my-5 p-2 sm:p-3 md:p-4 bg-green-50 dark:bg-gray-800 border border-green-200 dark:border-green-800 rounded-lg max-w-4xl mx-auto">
+                    <p className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-green-800 dark:text-green-300 mb-1 sm:mb-2 md:mb-3">
                       You might also want to ask:
                     </p>
                     <div className="space-y-1.5 sm:space-y-2 md:space-y-3 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3">
@@ -417,7 +417,7 @@ export default function Chatbot() {
                             variant="outline"
                             size="sm"
                             onClick={() => handlePredefinedQuestionClick(item.question)}
-                            className="bg-white hover:bg-green-100 text-green-800 border-green-200 w-full text-left justify-start text-xs sm:text-sm md:text-base py-1.5 px-2 md:py-2 md:px-3 h-auto min-h-[32px] md:min-h-[40px]"
+                            className="bg-white hover:bg-green-100 dark:bg-gray-700 dark:hover:bg-gray-600 text-green-800 dark:text-green-200 border-green-200 dark:border-green-700 w-full text-left justify-start text-xs sm:text-sm md:text-base py-1.5 px-2 md:py-2 md:px-3 h-auto min-h-[32px] md:min-h-[40px]"
                           >
                             {item.question}
                           </Button>
@@ -434,7 +434,7 @@ export default function Chatbot() {
       </div>
 
       {/* Fixed Input Area */}
-      <div className="p-2 sm:p-3 md:p-4 lg:p-6 border-t border-green-200 bg-green-50 flex-shrink-0">
+      <div className="p-2 sm:p-3 md:p-4 lg:p-6 border-t border-green-200 dark:border-green-800 bg-green-50 dark:bg-gray-900 flex-shrink-0">
         <div className="flex gap-1 sm:gap-2 md:gap-3 max-w-4xl mx-auto">
           <Input
             ref={inputRef}
@@ -443,7 +443,7 @@ export default function Chatbot() {
             onKeyDown={handleKeyDown}
             placeholder="Ask something about GUCC..."
             disabled={isLoading || !sessionId}
-            className="flex-1 border-green-300 focus-visible:ring-green-500 text-sm sm:text-base md:text-lg h-9 sm:h-10 md:h-12"
+            className="flex-1 border-green-300 dark:border-green-700 focus-visible:ring-green-500 text-sm sm:text-base md:text-lg h-9 sm:h-10 md:h-12"
           />
           <Button
             onClick={() => handleSendMessage()}

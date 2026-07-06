@@ -82,7 +82,7 @@ export default function GraphColoringPage() {
 
       <Card className="mb-8 border border-[#4ade80]/20">
         <CardHeader className="flex flex-row items-center gap-4">
-          <div className="h-12 w-12 rounded-full bg-[#f0f9f0] flex items-center justify-center">
+          <div className="h-12 w-12 rounded-full bg-[#f0f9f0] dark:bg-[#0a1f0a] flex items-center justify-center">
             <Palette className="h-6 w-6 text-[#4ade80]" />
           </div>
           <div>

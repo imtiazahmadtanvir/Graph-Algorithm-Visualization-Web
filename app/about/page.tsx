@@ -26,7 +26,7 @@ export default function AboutPage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="bg-[#f0f9f0] py-16 md:py-24">
+      <section className="bg-[#f0f9f0] dark:bg-[#0a1f0a] py-16 md:py-24">
         <div className="container">
           <div className="max-w-[800px] mx-auto text-center space-y-6">
             <h1 className="text-4xl md:text-5xl font-bold">About GraphAlgo</h1>
@@ -69,7 +69,7 @@ export default function AboutPage() {
       </section>
 
       {/* Our Mission Section */}
-      <section className="py-16 md:py-24 bg-[#f0f9f0]">
+      <section className="py-16 md:py-24 bg-[#f0f9f0] dark:bg-[#0a1f0a]">
         <div className="container">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Our Mission</h2>
@@ -79,10 +79,10 @@ export default function AboutPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card className="bg-white">
+            <Card className="bg-white dark:bg-card">
               <CardContent className="pt-6">
                 <div className="flex flex-col items-center text-center space-y-4">
-                  <div className="h-12 w-12 rounded-full bg-[#f0f9f0] flex items-center justify-center">
+                  <div className="h-12 w-12 rounded-full bg-[#f0f9f0] dark:bg-[#0a1f0a] flex items-center justify-center">
                     <BookOpen className="h-6 w-6 text-[#4ade80]" />
                   </div>
                   <h3 className="text-xl font-bold">Education</h3>
@@ -93,10 +93,10 @@ export default function AboutPage() {
               </CardContent>
             </Card>
 
-            <Card className="bg-white">
+            <Card className="bg-white dark:bg-card">
               <CardContent className="pt-6">
                 <div className="flex flex-col items-center text-center space-y-4">
-                  <div className="h-12 w-12 rounded-full bg-[#f0f9f0] flex items-center justify-center">
+                  <div className="h-12 w-12 rounded-full bg-[#f0f9f0] dark:bg-[#0a1f0a] flex items-center justify-center">
                     <GitGraph className="h-6 w-6 text-[#4ade80]" />
                   </div>
                   <h3 className="text-xl font-bold">Visualization</h3>
@@ -107,10 +107,10 @@ export default function AboutPage() {
               </CardContent>
             </Card>
 
-            <Card className="bg-white">
+            <Card className="bg-white dark:bg-card">
               <CardContent className="pt-6">
                 <div className="flex flex-col items-center text-center space-y-4">
-                  <div className="h-12 w-12 rounded-full bg-[#f0f9f0] flex items-center justify-center">
+                  <div className="h-12 w-12 rounded-full bg-[#f0f9f0] dark:bg-[#0a1f0a] flex items-center justify-center">
                     <Code className="h-6 w-6 text-[#4ade80]" />
                   </div>
                   <h3 className="text-xl font-bold">Innovation</h3>
@@ -137,7 +137,7 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {teamMembers.map((member, index) => (
               <div key={index} className="flex flex-col items-center text-center space-y-4">
-                <div className="h-32 w-32 rounded-full bg-[#f0f9f0] flex items-center justify-center">
+                <div className="h-32 w-32 rounded-full bg-[#f0f9f0] dark:bg-[#0a1f0a] flex items-center justify-center">
                   <User className="h-16 w-16 text-[#4ade80]" />
                 </div>
                 <div>
@@ -151,7 +151,7 @@ export default function AboutPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 md:py-24 bg-[#f0f9f0]">
+      <section className="py-16 md:py-24 bg-[#f0f9f0] dark:bg-[#0a1f0a]">
         <div className="container">
           <div className="max-w-[800px] mx-auto text-center space-y-6">
             <h2 className="text-3xl font-bold">Join Our Community</h2>

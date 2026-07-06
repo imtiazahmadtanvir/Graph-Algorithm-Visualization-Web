@@ -54,7 +54,7 @@ export default function AlgorithmsPage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="bg-[#f0f9f0] py-16 md:py-24">
+      <section className="bg-[#f0f9f0] dark:bg-[#0a1f0a] py-16 md:py-24">
         <div className="container">
           <div className="max-w-[800px] mx-auto text-center space-y-6">
             <h1 className="text-4xl md:text-5xl font-bold">Graph Algorithms</h1>
@@ -66,14 +66,14 @@ export default function AlgorithmsPage() {
       </section>
 
       {/* Algorithm Navigation */}
-      <section className="py-8 bg-white border-b">
+      <section className="py-8 bg-white dark:bg-background border-b">
         <div className="container">
           <div className="flex flex-wrap gap-4 justify-center">
             {["all", "pathfinding", "traversal", "spanning-tree", "coloring"].map((category) => (
               <Link
                 key={category}
                 href={`#${category}`}
-                className="px-4 py-2 rounded-full bg-[#f0f9f0] text-[#4ade80] hover:bg-[#4ade80] hover:text-white transition-colors"
+                className="px-4 py-2 rounded-full bg-[#f0f9f0] dark:bg-[#0a1f0a] text-[#4ade80] hover:bg-[#4ade80] hover:text-white transition-colors"
               >
                 {category.charAt(0).toUpperCase() + category.slice(1).replace("-", " ")}
               </Link>
@@ -86,7 +86,7 @@ export default function AlgorithmsPage() {
       <section className="py-16" id="all">
         <div className="container">
           <Tabs defaultValue="all" className="w-full">
-            <TabsList className="w-full justify-start mb-8 bg-[#f0f9f0] p-1 overflow-x-auto flex-nowrap">
+            <TabsList className="w-full justify-start mb-8 bg-[#f0f9f0] dark:bg-[#0a1f0a] p-1 overflow-x-auto flex-nowrap">
               <TabsTrigger value="all" className="flex-shrink-0">
                 All Algorithms
               </TabsTrigger>
@@ -139,7 +139,7 @@ function AlgorithmCard({ algorithm }) {
         <CardDescription>{algorithm.description}</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="h-40 bg-[#f0f9f0] rounded-md flex items-center justify-center">
+        <div className="h-40 bg-[#f0f9f0] dark:bg-[#0a1f0a] rounded-md flex items-center justify-center">
           <div className="h-24 w-24 flex items-center justify-center">{algorithm.icon}</div>
         </div>
       </CardContent>

@@ -5,7 +5,7 @@ import { Facebook, Twitter, Instagram, Github, Mail } from "lucide-react"
 
 export default function Footer() {
   return (
-    <footer className="bg-[#f0f9f0] border-t">
+    <footer className="bg-[#f0f9f0] dark:bg-[#0a1f0a] border-t">
       <div className="container py-12 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-4">

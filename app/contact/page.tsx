@@ -23,7 +23,7 @@ export default function ContactPage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="bg-[#f0f9f0] py-16 md:py-24">
+      <section className="bg-[#f0f9f0] dark:bg-[#0a1f0a] py-16 md:py-24">
         <div className="container">
           <div className="max-w-[800px] mx-auto text-center space-y-6">
             <h1 className="text-4xl md:text-5xl font-bold">Contact Us</h1>
@@ -45,7 +45,7 @@ export default function ContactPage() {
 
               <div className="space-y-6">
                 <div className="flex items-start gap-4">
-                  <div className="h-10 w-10 rounded-full bg-[#f0f9f0] flex items-center justify-center flex-shrink-0">
+                  <div className="h-10 w-10 rounded-full bg-[#f0f9f0] dark:bg-[#0a1f0a] flex items-center justify-center flex-shrink-0">
                     <Mail className="h-5 w-5 text-[#4ade80]" />
                   </div>
                   <div>
@@ -56,7 +56,7 @@ export default function ContactPage() {
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <div className="h-10 w-10 rounded-full bg-[#f0f9f0] flex items-center justify-center flex-shrink-0">
+                  <div className="h-10 w-10 rounded-full bg-[#f0f9f0] dark:bg-[#0a1f0a] flex items-center justify-center flex-shrink-0">
                     <Phone className="h-5 w-5 text-[#4ade80]" />
                   </div>
                   <div>
@@ -67,7 +67,7 @@ export default function ContactPage() {
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <div className="h-10 w-10 rounded-full bg-[#f0f9f0] flex items-center justify-center flex-shrink-0">
+                  <div className="h-10 w-10 rounded-full bg-[#f0f9f0] dark:bg-[#0a1f0a] flex items-center justify-center flex-shrink-0">
                     <MapPin className="h-5 w-5 text-[#4ade80]" />
                   </div>
                   <div>
@@ -132,7 +132,7 @@ export default function ContactPage() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-16 md:py-24 bg-[#f0f9f0]">
+      <section className="py-16 md:py-24 bg-[#f0f9f0] dark:bg-[#0a1f0a]">
         <div className="container">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Frequently Asked Questions</h2>
@@ -142,7 +142,7 @@ export default function ContactPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[1000px] mx-auto">
-            <Card className="bg-white">
+            <Card className="bg-white dark:bg-card">
               <CardContent className="pt-6">
                 <h3 className="text-xl font-bold mb-2">Is GraphAlgo free to use?</h3>
                 <p className="text-muted-foreground">
@@ -152,7 +152,7 @@ export default function ContactPage() {
               </CardContent>
             </Card>
 
-            <Card className="bg-white">
+            <Card className="bg-white dark:bg-card">
               <CardContent className="pt-6">
                 <h3 className="text-xl font-bold mb-2">Can I suggest a new algorithm?</h3>
                 <p className="text-muted-foreground">
@@ -162,7 +162,7 @@ export default function ContactPage() {
               </CardContent>
             </Card>
 
-            <Card className="bg-white">
+            <Card className="bg-white dark:bg-card">
               <CardContent className="pt-6">
                 <h3 className="text-xl font-bold mb-2">Do you offer educational discounts?</h3>
                 <p className="text-muted-foreground">
@@ -172,7 +172,7 @@ export default function ContactPage() {
               </CardContent>
             </Card>
 
-            <Card className="bg-white">
+            <Card className="bg-white dark:bg-card">
               <CardContent className="pt-6">
                 <h3 className="text-xl font-bold mb-2">How can I report a bug?</h3>
                 <p className="text-muted-foreground">
