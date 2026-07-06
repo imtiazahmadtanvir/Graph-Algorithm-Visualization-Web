@@ -73,7 +73,7 @@ This project is built using a modern, scalable web stack:
 ### Installation
 1. Clone the repository and navigate to the project directory:
    ```bash
-   cd "Graph-Algorithm-Visualization-Web"
+   cd Graph-Algorithm-Visualization-Web
    ```
 2. Install dependencies:
    ```bash
