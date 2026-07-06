@@ -248,6 +248,91 @@ function getHighlightedLines(algorithmName: string, step: any): number[] {
   return [];
 }
 
+function getStepExplanation(algorithmName: string, step: any): string {
+  if (!step) return "Click Play or step forward to begin.";
+  
+  if (step.reset) {
+    return "Resetting visualization to initial state.";
+  }
+  
+  if (algorithmName === "bfs") {
+    if (step.path) return `Target found! Reconstructing shortest path: ${step.path.join(" ➔ ")}`;
+    if (step.visited !== undefined && step.current !== undefined) return `Initializing BFS starting at node ${step.current}.`;
+    if (step.current !== undefined) return `De-queueing node ${step.current} and checking if it's the target.`;
+    if (step.visited !== undefined) return `Discovered neighbor node ${step.visited}, pushing to queue.`;
+  }
+  
+  if (algorithmName === "dfs") {
+    if (step.path) return `Target found! Path discovered: ${step.path.join(" ➔ ")}`;
+    if (step.visited !== undefined && step.current !== undefined) return `Initializing DFS starting at node ${step.current}.`;
+    if (step.current !== undefined) return `Recursively visiting node ${step.current}.`;
+    if (step.visited !== undefined) return `Traversing down to unvisited neighbor node ${step.visited}.`;
+  }
+  
+  if (algorithmName === "astar") {
+    if (step.path) return `Optimal path found! Shortest path: ${step.path.join(" ➔ ")}`;
+    if (step.visited !== undefined && step.current !== undefined) return `Initializing A* pathfinding from node ${step.current}.`;
+    if (step.current !== undefined) return `Expanding node ${step.current} with the lowest total f(n) = g(n) + h(n) value.`;
+    if (step.visited !== undefined) return `Calculating cost and adding neighbor node ${step.visited} to Open Set.`;
+  }
+  
+  if (algorithmName === "dijkstra") {
+    if (step.path) return `Shortest path found! Path: ${step.path.join(" ➔ ")}`;
+    if (step.visited !== undefined && step.current !== undefined) return `Initializing Dijkstra's algorithm from node ${step.current}.`;
+    if (step.current !== undefined) return `Selecting unvisited node ${step.current} with the minimum tentative distance.`;
+    if (step.visited !== undefined) return `Relaxing edge to neighbor node ${step.visited} and updating tentative distance.`;
+  }
+  
+  if (algorithmName === "graph-coloring") {
+    if (step.nodeColor) return `Assigning first available color to node ${step.nodeColor.id}. (Assigned color: ${step.nodeColor.color})`;
+  }
+  
+  if (algorithmName === "prims") {
+    if (step.mst) return "Prim's algorithm finished. Minimum Spanning Tree constructed.";
+    if (step.visited !== undefined && step.current !== undefined) return `Initializing Prim's MST starting at node ${step.current}.`;
+    if (step.current !== undefined) return `Examining all cut edges and choosing the minimum weight edge to node ${step.current}.`;
+    if (step.visited !== undefined) return `Adding node ${step.visited} and its connecting edge to the MST.`;
+  }
+  
+  return "Processing algorithm step...";
+}
+
+function highlightJS(line: string) {
+  if (line.trim().startsWith("//")) {
+    return <span className="text-emerald-500 font-normal">{line}</span>;
+  }
+
+  const keywords = ["const", "let", "function", "while", "for", "if", "else", "return", "break", "continue", "class", "new", "Set", "Map", "Record", "Infinity"];
+  const tokens = line.split(/(\s+|\(|\)|\{|\}|\[|\]|;|,|\.|\+|-|\*|\/|=|<|>|!|&|\|)/);
+  
+  return (
+    <>
+      {tokens.map((token, idx) => {
+        const trimmed = token.trim();
+        if (keywords.includes(trimmed)) {
+          if (["if", "else", "return", "break", "while", "for", "continue"].includes(trimmed)) {
+            return <span key={idx} className="text-[#c586c0] font-semibold">{token}</span>;
+          }
+          return <span key={idx} className="text-[#569cd6] font-semibold">{token}</span>;
+        }
+        if (["bfs", "dfs", "astar", "dijkstra", "graphColoring", "prims", "heuristic", "reconstructPath", "distance"].includes(trimmed)) {
+          return <span key={idx} className="text-[#dcdcaa]">{token}</span>;
+        }
+        if (/^\d+(\.\d+)?$/.test(trimmed)) {
+          return <span key={idx} className="text-[#b5cea8]">{token}</span>;
+        }
+        if (/^(".*"|'.*'|`.*`)$/.test(trimmed)) {
+          return <span key={idx} className="text-[#ce9178]">{token}</span>;
+        }
+        if (["=", "+", "-", "*", "/", "<", ">", "!", "&&", "||"].includes(trimmed)) {
+          return <span key={idx} className="text-[#d4d4d4] font-medium">{token}</span>;
+        }
+        return <span key={idx} className="text-[#d4d4d4]">{token}</span>;
+      })}
+    </>
+  );
+}
+
 
 
 // Simple types for nodes and edges
@@ -288,6 +373,7 @@ export default function GraphCanvas({
 }: GraphCanvasProps) {
   // References and state
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const codeViewportRef = useRef<HTMLDivElement>(null)
   const [nodes, setNodes] = useState<Node[]>([])
   const [edges, setEdges] = useState<Edge[]>([])
   const [isPlaying, setIsPlaying] = useState(false)
@@ -303,9 +389,9 @@ export default function GraphCanvas({
     if (isInitialized || initialNodes.length === 0) return
 
     // Deep clone the nodes and edges
-    const clonedNodes = initialNodes.map((node) => ({
+    const clonedNodes: Node[] = initialNodes.map((node) => ({
       ...node,
-      state: node.id === startNodeId ? "start" : node.id === endNodeId ? "end" : "default",
+      state: (node.id === startNodeId ? "start" : node.id === endNodeId ? "end" : "default") as Node["state"],
     }))
 
     setNodes(clonedNodes)
@@ -530,7 +616,7 @@ export default function GraphCanvas({
     setNodes((prevNodes) =>
       prevNodes.map((node) => ({
         ...node,
-        state: node.id === startNodeId ? "start" : node.id === endNodeId ? "end" : "default",
+        state: (node.id === startNodeId ? "start" : node.id === endNodeId ? "end" : "default") as Node["state"],
         color: undefined,
       })),
     )
@@ -551,6 +637,23 @@ export default function GraphCanvas({
   const codeLines = algorithmName && ALGORITHM_CODE[algorithmName as keyof typeof ALGORITHM_CODE]
     ? ALGORITHM_CODE[algorithmName as keyof typeof ALGORITHM_CODE].split("\n")
     : []
+
+  // Auto-scroll the code viewport to keep the active line centered
+  useEffect(() => {
+    if (highlightedLines.length === 0 || !codeViewportRef.current) return
+
+    const activeLine = codeViewportRef.current.querySelector("[data-active='true']") as HTMLElement
+    if (activeLine) {
+      const container = codeViewportRef.current
+      const offsetTop = activeLine.offsetTop
+
+      // Center the active line inside the code scroll window (with safe offsets)
+      container.scrollTo({
+        top: Math.max(0, offsetTop - 60),
+        behavior: "smooth"
+      })
+    }
+  }, [highlightedLines])
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
@@ -647,30 +750,47 @@ export default function GraphCanvas({
               )}
             </Button>
           </div>
-          <div className="relative flex-1 overflow-hidden rounded-md border border-border bg-[#18181b] p-4 text-xs font-mono text-gray-300">
-            <ScrollArea className="h-full w-full">
-              <div className="whitespace-pre font-mono leading-relaxed select-text">
-                {codeLines.map((line, index) => {
-                  const isHighlighted = highlightedLines.includes(index)
-                  return (
-                    <div
-                      key={index}
-                      className={cn(
-                        "px-2 py-0.5 rounded transition-all duration-150 border-l-2",
-                        isHighlighted
-                          ? "bg-green-500/20 text-[#4ade80] font-bold border-l-[#4ade80]"
-                          : "border-l-transparent text-gray-400"
-                      )}
-                    >
-                      <span className="inline-block w-6 text-right select-none text-gray-600 mr-4">
-                        {index + 1}
-                      </span>
-                      {line}
-                    </div>
-                  )
-                })}
-              </div>
-            </ScrollArea>
+
+          {/* Trace Status/Explanation Card */}
+          <div className="p-3 bg-[#f0f9f0] dark:bg-[#0a1f0a] rounded-md border border-[#4ade80]/20 flex flex-col gap-1 shadow-inner">
+            <div className="flex justify-between items-center text-[10px] font-bold text-green-800 dark:text-green-300 uppercase tracking-wider">
+              <span>Tracer Action</span>
+              <span>Step {currentStep} / {steps.length}</span>
+            </div>
+            <p className="text-xs font-semibold text-green-950 dark:text-green-100 leading-relaxed mt-0.5">
+              {activeStep ? getStepExplanation(algorithmName, activeStep) : "Click Play to trace the algorithm step-by-step."}
+            </p>
+          </div>
+
+          <div 
+            ref={codeViewportRef}
+            className="relative flex-1 overflow-y-auto rounded-md border border-border bg-[#1e1e1e] p-3 text-xs font-mono leading-relaxed select-text shadow-lg max-h-[430px]"
+          >
+            <div className="whitespace-pre font-mono select-text">
+              {codeLines.map((line, index) => {
+                const isHighlighted = highlightedLines.includes(index)
+                const isFirstHighlighted = isHighlighted && index === highlightedLines[0]
+                return (
+                  <div
+                    key={index}
+                    data-active={isFirstHighlighted ? "true" : "false"}
+                    className={cn(
+                      "px-2 py-0.5 rounded transition-all duration-150 border-l-2 flex items-start",
+                      isHighlighted
+                        ? "bg-green-500/20 text-white font-bold border-l-[#4ade80] shadow-sm"
+                        : "border-l-transparent text-gray-400"
+                    )}
+                  >
+                    <span className="inline-block w-6 text-right select-none text-gray-600 mr-4 font-normal font-mono">
+                      {index + 1}
+                    </span>
+                    <span className="flex-1 whitespace-pre-wrap font-mono">
+                      {highlightJS(line)}
+                    </span>
+                  </div>
+                )
+              })}
+            </div>
           </div>
         </Card>
       )}
