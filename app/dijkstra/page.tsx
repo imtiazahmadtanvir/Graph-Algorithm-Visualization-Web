@@ -114,14 +114,15 @@ export default function DijkstraPage() {
 
       {nodes.length > 0 && edges.length > 0 && (
         <GraphCanvas
-          nodes={nodes}
-          edges={edges}
-          algorithm={dijkstra}
-          startNodeId={0}
-          endNodeId={5}
-          weighted={true}
-          directed={true}
-        />
+           nodes={nodes}
+           edges={edges}
+           algorithm={dijkstra}
+           startNodeId={0}
+           endNodeId={5}
+           weighted={true}
+           directed={true}
+           algorithmName="dijkstra"
+         />
       )}
     </div>
   )

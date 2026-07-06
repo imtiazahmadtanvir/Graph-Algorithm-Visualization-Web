@@ -122,7 +122,7 @@ export default function DFSPage() {
       </Card>
 
       {nodes.length > 0 && edges.length > 0 && (
-        <GraphCanvas nodes={nodes} edges={edges} algorithm={dfs} startNodeId={0} endNodeId={14} directed={true} />
+        <GraphCanvas nodes={nodes} edges={edges} algorithm={dfs} startNodeId={0} endNodeId={14} directed={true} algorithmName="dfs" />
       )}
     </div>
   )

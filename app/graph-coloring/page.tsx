@@ -109,7 +109,7 @@ export default function GraphColoringPage() {
       </Card>
 
       {nodes.length > 0 && edges.length > 0 && (
-        <GraphCanvas nodes={nodes} edges={edges} algorithm={graphColoring} startNodeId={0} endNodeId={0} />
+        <GraphCanvas nodes={nodes} edges={edges} algorithm={graphColoring} startNodeId={0} endNodeId={0} algorithmName="graph-coloring" />
       )}
     </div>
   )

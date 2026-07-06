@@ -126,6 +126,7 @@ export default function PrimsPage() {
           startNodeId={0}
           endNodeId={0}
           weighted={true}
+          algorithmName="prims"
         />
       )}
     </div>

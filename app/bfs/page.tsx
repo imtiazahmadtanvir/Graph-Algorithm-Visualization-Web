@@ -121,6 +121,7 @@ export default function BFSPage() {
           startNodeId={0}
           endNodeId={nodes.length - 1}
           directed={true}
+          algorithmName="bfs"
         />
       )}
     </div>

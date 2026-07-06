@@ -154,6 +154,7 @@ export default function AStarPage() {
           startNodeId={0}
           endNodeId={nodes.length - 1}
           weighted={true}
+          algorithmName="astar"
         />
       )}
     </div>
