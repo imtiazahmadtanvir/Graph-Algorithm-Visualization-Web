@@ -6,8 +6,7 @@ import predefined from '@/data/predefined.json';
 const apiKey = process.env.NEXT_PUBLIC_GOOGLE_API_KEY ;
 const MODEL_NAME = "gemini-2.0-flash";
 
-// Initialize the Google Generative AI client
-const genAI = new GoogleGenerativeAI(apiKey!);
+
 
 const generationConfig = {
   temperature: 0.9,
@@ -33,6 +32,8 @@ export async function POST(request: NextRequest) {
     if (!apiKey) {
       return NextResponse.json({ error: "API key is missing" }, { status: 500 });
     }
+
+    const genAI = new GoogleGenerativeAI(apiKey);
 
     let chatSession;
 
