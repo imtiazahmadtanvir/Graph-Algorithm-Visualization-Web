@@ -1,0 +1,81 @@
+{
+    "intents": [
+      {
+        "tag": "greeting",
+        "patterns": ["Hi", "Hey", "Hello", "Good morning", "Good evening"],
+        "responses": ["Hello!", "Hi there!", "Hey!", "Hi! How can I help you?"]
+      },
+      {
+        "tag": "goodbye",
+        "patterns": ["Bye", "See you later", "Goodbye", "Catch you later"],
+        "responses": ["Goodbye!", "See you soon!", "Have a nice day!", "Take care!"]
+      },
+      {
+        "tag": "thanks",
+        "patterns": ["Thanks", "Thank you", "Thanks a lot", "Appreciate it"],
+        "responses": ["You're welcome!", "No problem!", "Glad I could help!", "Anytime!"]
+      },
+      {
+        "tag": "name",
+        "patterns": ["What is your name?", "Who are you?", "Tell me your name"],
+        "responses": ["I am GraphAlgo Bot!", "You can call me AlgoBot."]
+      },
+      {
+        "tag": "help",
+        "patterns": ["Help me", "What can you do?", "How do I use this platform?"],
+        "responses": [
+          "I can help you understand graph algorithms by showing visualizations.",
+          "Ask me about A*, BFS, DFS, Dijkstra, Prim, or Graph Coloring!"
+        ]
+      },
+      {
+        "tag": "a_star",
+        "patterns": ["Tell me about A*", "Explain A star", "How does A* work?"],
+        "responses": [
+          "A* is a pathfinding algorithm that uses a heuristic to find the shortest path. It balances actual cost and estimated cost.",
+          "A* uses f(n) = g(n) + h(n) to guide its search."
+        ]
+      },
+      {
+        "tag": "dijkstra",
+        "patterns": ["What is Dijkstra?", "Dijkstra algorithm", "Shortest path algorithm"],
+        "responses": [
+          "Dijkstra's Algorithm finds the shortest path in a graph with non-negative edge weights.",
+          "It uses a priority queue to pick the next closest node."
+        ]
+      },
+      {
+        "tag": "bfs",
+        "patterns": ["Explain BFS", "Breadth First Search", "BFS algorithm"],
+        "responses": [
+          "BFS explores the graph level by level using a queue. It finds the shortest path in unweighted graphs.",
+          "Useful for finding connected components or shortest paths."
+        ]
+      },
+      {
+        "tag": "dfs",
+        "patterns": ["Explain DFS", "Depth First Search", "DFS algorithm"],
+        "responses": [
+          "DFS explores as far as possible along each branch before backtracking. It uses a stack or recursion.",
+          "It's useful for cycle detection, topological sorting, etc."
+        ]
+      },
+      {
+        "tag": "prim",
+        "patterns": ["What is Prim's Algorithm?", "Explain Prim", "Minimum Spanning Tree"],
+        "responses": [
+          "Prim's Algorithm builds the minimum spanning tree by always picking the smallest edge that connects to the tree.",
+          "It's a greedy algorithm used in network design."
+        ]
+      },
+      {
+        "tag": "graph_coloring",
+        "patterns": ["Graph Coloring", "Color a graph", "Explain graph coloring"],
+        "responses": [
+          "Graph coloring assigns colors to nodes so that no two adjacent nodes have the same color.",
+          "It's often used in scheduling problems and register allocation."
+        ]
+      }
+    ]
+  }
+  
