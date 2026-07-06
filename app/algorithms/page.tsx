@@ -1,3 +1,4 @@
+import type React from "react"
 import Link from "next/link"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { GitGraph, GitFork, Palette, Network, Route, GitBranch, ArrowRight } from "lucide-react"
@@ -130,7 +131,15 @@ export default function AlgorithmsPage() {
   )
 }
 
-function AlgorithmCard({ algorithm }) {
+interface Algorithm {
+  title: string
+  description: string
+  href: string
+  icon: React.ReactNode
+  category: string
+}
+
+function AlgorithmCard({ algorithm }: { algorithm: Algorithm }) {
   return (
     <Card className="overflow-hidden border border-[#4ade80]/20 hover:shadow-lg transition-shadow">
       <CardHeader className="pb-2">
