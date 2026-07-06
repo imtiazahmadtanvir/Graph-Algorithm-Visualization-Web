@@ -130,30 +130,45 @@ function HeroCanvas() {
       initialized = true
     }
 
-    const resizeObserver = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        const { width: w, height: h } = entry.contentRect
-        if (w === 0 || h === 0) continue
-
-        width = w
-        height = h
-        canvas.width = width * window.devicePixelRatio
-        canvas.height = height * window.devicePixelRatio
-        ctx.scale(window.devicePixelRatio, window.devicePixelRatio)
-
-        if (!initialized) {
-          initializeNodes(width, height)
-        }
-      }
-    })
-    resizeObserver.observe(canvas)
-
     let animationFrameId = 0
-    
+
+    const handleResize = () => {
+      const w = canvas.clientWidth
+      const h = canvas.clientHeight
+      console.log("[Canvas Debug] handleResize called: w =", w, "h =", h, "devicePixelRatio =", window.devicePixelRatio)
+      if (w === 0 || h === 0) return
+
+      width = w
+      height = h
+      canvas.width = width * window.devicePixelRatio
+      canvas.height = height * window.devicePixelRatio
+      ctx.scale(window.devicePixelRatio, window.devicePixelRatio)
+
+      if (!initialized) {
+        initializeNodes(width, height)
+      }
+    }
+
+    // Initialize dimensions on mount
+    handleResize()
+    window.addEventListener("resize", handleResize)
+
     const animate = () => {
       if (!initialized) {
-        animationFrameId = requestAnimationFrame(animate)
-        return
+        const w = canvas.clientWidth
+        const h = canvas.clientHeight
+        if (w > 0 && h > 0) {
+          console.log("[Canvas Debug] Dimensions became available in animate loop: w =", w, "h =", h)
+          handleResize()
+        } else {
+          animationFrameId = requestAnimationFrame(animate)
+          return
+        }
+      }
+
+      // Log drawing state occasionally (every 100 frames)
+      if (Math.random() < 0.01) {
+        console.log("[Canvas Debug] animate drawing frame: width =", width, "height =", height, "nodes count =", nodes.length, "steps count =", steps.length)
       }
 
       ctx.clearRect(0, 0, width, height)
@@ -237,7 +252,7 @@ function HeroCanvas() {
     animate()
 
     return () => {
-      resizeObserver.disconnect()
+      window.removeEventListener("resize", handleResize)
       cancelAnimationFrame(animationFrameId)
     }
   }, [])
@@ -257,7 +272,7 @@ function HeroCanvas() {
         <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Path</div>
       </div>
 
-      <canvas ref={canvasRef} className="w-full h-full block cursor-crosshair" />
+      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full block cursor-crosshair" />
     </div>
   )
 }

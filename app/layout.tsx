@@ -5,6 +5,7 @@ import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
+import FloatingChatbot from "@/components/chatbot/floating-chatbot"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -34,7 +35,3 @@ export default function RootLayout({
     </html>
   )
 }
-
-
-import './globals.css'
-import FloatingChatbot from "@/components/chatbot/floating-chatbot"
