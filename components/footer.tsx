@@ -89,10 +89,10 @@ export default function Footer() {
             </p>
             <p className="text-sm text-zinc-550 dark:text-zinc-400">Stay updated with our latest algorithms and features.</p>
             <div className="flex space-x-2">
-              <Input 
-                placeholder="Your email" 
-                type="email" 
-                className="max-w-[220px] bg-zinc-50 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500" 
+              <Input
+                placeholder="Your email"
+                type="email"
+                className="max-w-[220px] bg-zinc-50 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500"
               />
               <Button variant="default" className="bg-emerald-600 hover:bg-emerald-500 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-zinc-950 font-semibold">
                 <Mail className="h-4 w-4 mr-2" />

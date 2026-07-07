@@ -39,7 +39,7 @@ function HeroCanvas() {
       steps = []
       const start = Math.floor(Math.random() * nodeCount)
       const end = Math.floor(Math.random() * nodeCount)
-      
+
       const queue: number[] = [start]
       const visited = new Set<number>([start])
       const parent: Record<number, number> = {}
@@ -71,7 +71,7 @@ function HeroCanvas() {
             visited.forEach(id => { checkStates[id] = "visited" })
             checkStates[curr] = "current"
             checkStates[n] = "current"
-            
+
             steps.push({
               nodeStates: checkStates,
               activeEdge: [curr, n]
@@ -393,17 +393,17 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative py-20 lg:py-28 overflow-hidden border-b border-zinc-200 dark:border-zinc-900 bg-gradient-to-b from-white via-zinc-50/50 to-white dark:from-zinc-950 dark:via-zinc-900/10 dark:to-zinc-950">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-emerald-100/30 via-transparent to-transparent dark:from-emerald-950/20 dark:via-zinc-950/0 dark:to-zinc-950/0 pointer-events-none" />
-        
+
         <div className="container max-w-7xl mx-auto px-4 relative">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            
+
             {/* Left Info Column */}
             <div className="space-y-6 text-left">
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-xs text-emerald-600 dark:text-emerald-400 font-bold tracking-wide">
                 <Star className="w-3.5 h-3.5 fill-current" />
                 State-of-the-Art Visualizer
               </div>
-              
+
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
                 Master{" "}
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-500 dark:from-emerald-400 dark:via-teal-300 dark:to-cyan-400">
@@ -411,11 +411,11 @@ export default function Home() {
                 </span>
                 {" "}With Interactive Tracing
               </h1>
-              
+
               <p className="text-lg text-zinc-500 dark:text-zinc-400 max-w-[550px] leading-relaxed">
                 Step inside the graph logic. Play traversal animations, trace runtime code variables in C++, Python, and Java, and customize nodes dynamically.
               </p>
-              
+
               <div className="flex flex-wrap gap-4 pt-2">
                 <Button size="lg" asChild className="bg-emerald-500 hover:bg-emerald-400 text-white dark:text-zinc-950 font-bold transition-transform hover:-translate-y-0.5">
                   <Link href="/algorithms">
@@ -609,21 +609,21 @@ export default function Home() {
       {/* CTA Section */}
       <section className="py-20 lg:py-28 relative overflow-hidden bg-white dark:bg-zinc-950">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom,_var(--tw-gradient-stops))] from-emerald-100/20 via-transparent to-transparent dark:from-emerald-950/15 dark:via-zinc-950/0 dark:to-zinc-950/0 pointer-events-none" />
-        
+
         <div className="container max-w-5xl mx-auto px-4 relative text-center space-y-6">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-500/10 border border-emerald-500/25 rounded-full text-xs text-emerald-600 dark:text-emerald-400 font-bold uppercase tracking-wider">
             <ShieldCheck className="w-3.5 h-3.5" />
             100% Free & Open-Source
           </div>
-          
+
           <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight">
             Ready to Master Graph Logic?
           </h2>
-          
+
           <p className="text-base text-zinc-500 dark:text-zinc-400 max-w-[600px] mx-auto leading-relaxed">
             Jump in and start visualizing right away. No account sign-up, email configuration, or installation required.
           </p>
-          
+
           <div className="flex flex-col sm:flex-row justify-center gap-4 pt-4">
             <Button size="lg" asChild className="bg-emerald-500 hover:bg-emerald-400 text-white dark:text-zinc-950 font-bold transition-transform hover:-translate-y-0.5">
               <Link href="/algorithms">Get Started Now</Link>
