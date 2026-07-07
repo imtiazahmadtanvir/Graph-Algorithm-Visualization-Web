@@ -83,9 +83,24 @@ export default function DijkstraPage() {
         </Button>
       </div>
 
-      <Card className="mb-8 border border-[#4ade80]/20">
+      {nodes.length > 0 && edges.length > 0 && (
+        <div className="mb-8">
+          <GraphCanvas
+             nodes={nodes}
+             edges={edges}
+             algorithm={dijkstra}
+             startNodeId={0}
+             endNodeId={5}
+             weighted={true}
+             directed={true}
+             algorithmName="dijkstra"
+           />
+        </div>
+      )}
+
+      <Card className="border border-[#4ade80]/20">
         <CardHeader className="flex flex-row items-center gap-4">
-          <div className="h-12 w-12 rounded-full bg-[#f0f9f0] dark:bg-[#0a1f0a] flex items-center justify-center">
+          <div className="h-12 w-12 rounded-full bg-[#f0f9f0] dark:bg-black flex items-center justify-center">
             <Route className="h-6 w-6 text-[#4ade80]" />
           </div>
           <div>
@@ -111,19 +126,6 @@ export default function DijkstraPage() {
           </div>
         </CardContent>
       </Card>
-
-      {nodes.length > 0 && edges.length > 0 && (
-        <GraphCanvas
-           nodes={nodes}
-           edges={edges}
-           algorithm={dijkstra}
-           startNodeId={0}
-           endNodeId={5}
-           weighted={true}
-           directed={true}
-           algorithmName="dijkstra"
-         />
-      )}
     </div>
   )
 }

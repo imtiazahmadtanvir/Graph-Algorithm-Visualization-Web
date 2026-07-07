@@ -83,9 +83,23 @@ export default function BFSPage() {
         </Button>
       </div>
 
-      <Card className="mb-8 border border-[#4ade80]/20">
+      {nodes.length > 0 && edges.length > 0 && (
+        <div className="mb-8">
+          <GraphCanvas
+            nodes={nodes}
+            edges={edges}
+            algorithm={bfs}
+            startNodeId={0}
+            endNodeId={nodes.length - 1}
+            directed={true}
+            algorithmName="bfs"
+          />
+        </div>
+      )}
+
+      <Card className="border border-[#4ade80]/20">
         <CardHeader className="flex flex-row items-center gap-4">
-          <div className="h-12 w-12 rounded-full bg-[#f0f9f0] dark:bg-[#0a1f0a] flex items-center justify-center">
+          <div className="h-12 w-12 rounded-full bg-[#f0f9f0] dark:bg-black flex items-center justify-center">
             <Network className="h-6 w-6 text-[#4ade80]" />
           </div>
           <div>
@@ -112,18 +126,6 @@ export default function BFSPage() {
           </div>
         </CardContent>
       </Card>
-
-      {nodes.length > 0 && edges.length > 0 && (
-        <GraphCanvas
-          nodes={nodes}
-          edges={edges}
-          algorithm={bfs}
-          startNodeId={0}
-          endNodeId={nodes.length - 1}
-          directed={true}
-          algorithmName="bfs"
-        />
-      )}
     </div>
   )
 }

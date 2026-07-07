@@ -1758,17 +1758,6 @@ export default function GraphCanvas({
             </Button>
           </div>
 
-          {/* Trace Status/Explanation Card */}
-          <div className="p-3 bg-[#f0f9f0] dark:bg-[#0a1f0a] rounded-md border border-[#4ade80]/20 flex flex-col gap-1 shadow-inner">
-            <div className="flex justify-between items-center text-[10px] font-bold text-green-800 dark:text-green-300 uppercase tracking-wider">
-              <span>Tracer Action</span>
-              <span>Step {currentStep} / {steps.length}</span>
-            </div>
-            <p className="text-xs font-semibold text-green-950 dark:text-green-100 leading-relaxed mt-0.5">
-              {activeStep ? getStepExplanation(algorithmName, activeStep) : "Click Play to trace the algorithm step-by-step."}
-            </p>
-          </div>
-
           <div 
             ref={codeViewportRef}
             className="relative flex-1 overflow-y-auto rounded-md border border-border bg-[#1e1e1e] p-3 text-xs font-mono leading-relaxed select-text shadow-lg max-h-[430px]"
@@ -1798,6 +1787,17 @@ export default function GraphCanvas({
                 )
               })}
             </div>
+          </div>
+
+          {/* Trace Status/Explanation Card */}
+          <div className="p-3 bg-[#f0f9f0] dark:bg-black rounded-md border border-[#4ade80]/20 flex flex-col gap-1 shadow-inner">
+            <div className="flex justify-between items-center text-[10px] font-bold text-green-800 dark:text-green-300 uppercase tracking-wider">
+              <span>Tracer Action</span>
+              <span>Step {currentStep} / {steps.length}</span>
+            </div>
+            <p className="text-xs font-semibold text-green-950 dark:text-green-100 leading-relaxed mt-0.5">
+              {activeStep ? getStepExplanation(algorithmName, activeStep) : "Click Play to trace the algorithm step-by-step."}
+            </p>
           </div>
         </Card>
       )}
