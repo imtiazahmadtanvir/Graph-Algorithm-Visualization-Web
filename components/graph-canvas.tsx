@@ -1482,21 +1482,70 @@ export default function GraphCanvas({
     return () => clearTimeout(timer)
   }, [isPlaying, currentStep, steps, speed, startNodeId, endNodeId])
 
+  // Track actual canvas width and height for responsive coordinates scaling
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        setDimensions({
+          width: Math.floor(entry.contentRect.width),
+          height: Math.floor(entry.contentRect.height),
+        })
+      }
+    })
+
+    resizeObserver.observe(canvas)
+    
+    // Initial size setting
+    const rect = canvas.getBoundingClientRect()
+    setDimensions({ width: Math.floor(rect.width), height: Math.floor(rect.height) })
+
+    return () => resizeObserver.disconnect()
+  }, [])
+
   // Draw the graph
   useEffect(() => {
     const canvas = canvasRef.current
-    if (!canvas || nodes.length === 0) return
+    if (!canvas || nodes.length === 0 || dimensions.width === 0 || dimensions.height === 0) return
 
     const ctx = canvas.getContext("2d")
     if (!ctx) return
 
     // Set canvas dimensions
-    const rect = canvas.getBoundingClientRect()
-    canvas.width = rect.width
-    canvas.height = rect.height
+    canvas.width = dimensions.width
+    canvas.height = dimensions.height
 
     // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+    // Find coordinate bounds of the current node list to scale them relative to canvas size
+    const xValues = nodes.map((n) => n.x)
+    const yValues = nodes.map((n) => n.y)
+    const minX = xValues.length > 0 ? Math.min(...xValues) : 0
+    const maxX = xValues.length > 0 ? Math.max(...xValues) : 1
+    const minY = yValues.length > 0 ? Math.min(...yValues) : 0
+    const maxY = yValues.length > 0 ? Math.max(...yValues) : 1
+
+    const widthRange = maxX - minX
+    const heightRange = maxY - minY
+
+    // Padding ensures that node nodes with radius 20 do not cross the canvas limits
+    const padding = 35
+    const scale = Math.min(
+      widthRange > 0 ? (canvas.width - padding * 2) / widthRange : 1,
+      heightRange > 0 ? (canvas.height - padding * 2) / heightRange : 1
+    )
+
+    // Map each node to its responsive coordinate location
+    const mappedNodes = nodes.map((node) => ({
+      ...node,
+      drawX: padding + (node.x - minX) * scale + (canvas.width - padding * 2 - widthRange * scale) / 2,
+      drawY: padding + (node.y - minY) * scale + (canvas.height - padding * 2 - heightRange * scale) / 2,
+    }))
 
     // Get colors based on theme
     const isDark = theme === "dark"
@@ -1507,32 +1556,32 @@ export default function GraphCanvas({
 
     // Draw edges
     edges.forEach((edge) => {
-      const fromNode = nodes.find((n) => n.id === edge.from)
-      const toNode = nodes.find((n) => n.id === edge.to)
+      const fromNode = mappedNodes.find((n) => n.id === edge.from)
+      const toNode = mappedNodes.find((n) => n.id === edge.to)
 
       if (fromNode && toNode) {
         // Draw the edge line
         ctx.beginPath()
-        ctx.moveTo(fromNode.x, fromNode.y)
-        ctx.lineTo(toNode.x, toNode.y)
+        ctx.moveTo(fromNode.drawX, fromNode.drawY)
+        ctx.lineTo(toNode.drawX, toNode.drawY)
         ctx.strokeStyle = edgeColor
         ctx.lineWidth = 2
         ctx.stroke()
 
         // Draw arrow if directed
         if (directed) {
-          const angle = Math.atan2(toNode.y - fromNode.y, toNode.x - fromNode.x)
+          const angle = Math.atan2(toNode.drawY - fromNode.drawY, toNode.drawX - fromNode.drawX)
           const arrowSize = 10
 
           ctx.beginPath()
-          ctx.moveTo(toNode.x - Math.cos(angle) * 20, toNode.y - Math.sin(angle) * 20)
+          ctx.moveTo(toNode.drawX - Math.cos(angle) * 20, toNode.drawY - Math.sin(angle) * 20)
           ctx.lineTo(
-            toNode.x - Math.cos(angle) * 20 - Math.cos(angle - Math.PI / 6) * arrowSize,
-            toNode.y - Math.sin(angle) * 20 - Math.sin(angle - Math.PI / 6) * arrowSize,
+            toNode.drawX - Math.cos(angle) * 20 - Math.cos(angle - Math.PI / 6) * arrowSize,
+            toNode.drawY - Math.sin(angle) * 20 - Math.sin(angle - Math.PI / 6) * arrowSize,
           )
           ctx.lineTo(
-            toNode.x - Math.cos(angle) * 20 - Math.cos(angle + Math.PI / 6) * arrowSize,
-            toNode.y - Math.sin(angle) * 20 - Math.sin(angle + Math.PI / 6) * arrowSize,
+            toNode.drawX - Math.cos(angle) * 20 - Math.cos(angle + Math.PI / 6) * arrowSize,
+            toNode.drawY - Math.sin(angle) * 20 - Math.sin(angle + Math.PI / 6) * arrowSize,
           )
           ctx.closePath()
           ctx.fillStyle = edgeColor
@@ -1541,8 +1590,8 @@ export default function GraphCanvas({
 
         // Draw weight if weighted
         if (weighted && edge.weight !== undefined) {
-          const midX = (fromNode.x + toNode.x) / 2
-          const midY = (fromNode.y + toNode.y) / 2
+          const midX = (fromNode.drawX + toNode.drawX) / 2
+          const midY = (fromNode.drawY + toNode.drawY) / 2
 
           ctx.font = "12px sans-serif"
           ctx.fillStyle = textColor
@@ -1554,9 +1603,9 @@ export default function GraphCanvas({
     })
 
     // Draw nodes
-    nodes.forEach((node) => {
+    mappedNodes.forEach((node) => {
       ctx.beginPath()
-      ctx.arc(node.x, node.y, 20, 0, Math.PI * 2)
+      ctx.arc(node.drawX, node.drawY, 20, 0, Math.PI * 2)
 
       // Set fill color based on node state
       if (node.color) {
@@ -1593,9 +1642,9 @@ export default function GraphCanvas({
       ctx.fillStyle = textColor
       ctx.textAlign = "center"
       ctx.textBaseline = "middle"
-      ctx.fillText(node.id.toString(), node.x, node.y)
+      ctx.fillText(node.id.toString(), node.drawX, node.drawY)
     })
-  }, [nodes, edges, directed, weighted, theme])
+  }, [nodes, edges, directed, weighted, theme, dimensions])
 
   // Reset the visualization
   const resetVisualization = () => {
