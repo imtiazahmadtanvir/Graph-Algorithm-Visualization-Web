@@ -135,7 +135,6 @@ function HeroCanvas() {
     const handleResize = () => {
       const w = canvas.clientWidth
       const h = canvas.clientHeight
-      console.log("[Canvas Debug] handleResize called: w =", w, "h =", h, "devicePixelRatio =", window.devicePixelRatio)
       if (w === 0 || h === 0) return
 
       width = w
@@ -153,12 +152,13 @@ function HeroCanvas() {
     handleResize()
     window.addEventListener("resize", handleResize)
 
+    const isDarkMode = () => document.documentElement.classList.contains("dark")
+
     const animate = () => {
       if (!initialized) {
         const w = canvas.clientWidth
         const h = canvas.clientHeight
         if (w > 0 && h > 0) {
-          console.log("[Canvas Debug] Dimensions became available in animate loop: w =", w, "h =", h)
           handleResize()
         } else {
           animationFrameId = requestAnimationFrame(animate)
@@ -166,12 +166,9 @@ function HeroCanvas() {
         }
       }
 
-      // Log drawing state occasionally (every 100 frames)
-      if (Math.random() < 0.01) {
-        console.log("[Canvas Debug] animate drawing frame: width =", width, "height =", height, "nodes count =", nodes.length, "steps count =", steps.length)
-      }
-
       ctx.clearRect(0, 0, width, height)
+
+      const dark = isDarkMode()
 
       // Move nodes slightly
       nodes.forEach(n => {
@@ -187,7 +184,7 @@ function HeroCanvas() {
 
       // Draw all edges
       ctx.lineWidth = 1
-      ctx.strokeStyle = "rgba(63, 63, 70, 0.25)"
+      ctx.strokeStyle = dark ? "rgba(63, 63, 70, 0.25)" : "rgba(161, 161, 170, 0.4)"
       for (let i = 0; i < nodeCount; i++) {
         nodes[i].neighbors.forEach(nIdx => {
           if (nIdx > i) {
@@ -228,7 +225,7 @@ function HeroCanvas() {
           ctx.fillStyle = "#3b82f6" // blue-500
           ctx.shadowBlur = 0
         } else {
-          ctx.fillStyle = "#3f3f46" // zinc-700
+          ctx.fillStyle = dark ? "#3f3f46" : "#a1a1aa" // zinc-700 / zinc-400
           ctx.shadowBlur = 0
         }
 
@@ -251,22 +248,29 @@ function HeroCanvas() {
 
     animate()
 
+    // Watch for theme changes to re-render canvas properly
+    const observer = new MutationObserver(() => {
+      // Theme class changed, canvas will pick up on next frame
+    })
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] })
+
     return () => {
       window.removeEventListener("resize", handleResize)
       cancelAnimationFrame(animationFrameId)
+      observer.disconnect()
     }
   }, [])
 
   return (
-    <div className="relative w-full h-[340px] lg:h-[420px] rounded-2xl border border-zinc-800 bg-zinc-900/30 backdrop-blur shadow-2xl overflow-hidden flex items-center justify-center">
+    <div className="relative w-full h-[340px] lg:h-[420px] rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100/50 dark:bg-zinc-900/30 backdrop-blur shadow-2xl overflow-hidden flex items-center justify-center">
       {/* Animation Status Tags */}
-      <div className="absolute top-4 left-4 px-3 py-1 bg-zinc-900/80 border border-zinc-800/80 rounded-full text-[10px] text-zinc-400 font-semibold uppercase tracking-wider flex items-center gap-1.5 backdrop-blur-md">
+      <div className="absolute top-4 left-4 px-3 py-1 bg-white/80 dark:bg-zinc-900/80 border border-zinc-200/80 dark:border-zinc-800/80 rounded-full text-[10px] text-zinc-500 dark:text-zinc-400 font-semibold uppercase tracking-wider flex items-center gap-1.5 backdrop-blur-md">
         <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
         Live BFS Traverser
       </div>
 
-      <div className="absolute bottom-4 right-4 flex flex-wrap gap-3 text-[10px] font-bold text-zinc-500 bg-zinc-950/80 px-3 py-1.5 rounded-lg border border-zinc-800/65 backdrop-blur-md">
-        <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-zinc-600"></span> Default</div>
+      <div className="absolute bottom-4 right-4 flex flex-wrap gap-3 text-[10px] font-bold text-zinc-500 bg-white/80 dark:bg-zinc-950/80 px-3 py-1.5 rounded-lg border border-zinc-200/65 dark:border-zinc-800/65 backdrop-blur-md">
+        <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-zinc-400 dark:bg-zinc-600"></span> Default</div>
         <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span> Visited</div>
         <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-orange-500"></span> Current</div>
         <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Path</div>
@@ -283,16 +287,16 @@ export default function Home() {
       title: "A* Pathfinding",
       description: "Uses coordinates and heuristics to plot the fastest obstacle-free course between nodes.",
       href: "/astar",
-      icon: <GitGraph className="h-6 w-6 text-emerald-400" />,
+      icon: <GitGraph className="h-6 w-6 text-emerald-500 dark:text-emerald-400" />,
       svgPreview: (
-        <svg viewBox="0 0 200 120" className="w-full h-full text-zinc-600 fill-none stroke-current stroke-[1.5]">
+        <svg viewBox="0 0 200 120" className="w-full h-full fill-none stroke-current stroke-[1.5] text-zinc-400 dark:text-zinc-600">
           <g>
             {/* Grid layout */}
             {Array.from({ length: 9 }).map((_, i) => (
-              <line key={i} x1={i * 25} y1="0" x2={i * 25} y2="120" stroke="rgba(63, 63, 70, 0.2)" />
+              <line key={i} x1={i * 25} y1="0" x2={i * 25} y2="120" className="stroke-zinc-200 dark:stroke-zinc-800/50" />
             ))}
             {Array.from({ length: 5 }).map((_, i) => (
-              <line key={i} x1="0" y1={i * 30} x2={200} y2={i * 30} stroke="rgba(63, 63, 70, 0.2)" />
+              <line key={i} x1="0" y1={i * 30} x2={200} y2={i * 30} className="stroke-zinc-200 dark:stroke-zinc-800/50" />
             ))}
           </g>
           {/* Obstacles */}
@@ -310,26 +314,26 @@ export default function Home() {
       title: "Breadth-First Search (BFS)",
       description: "Traverses layered concentric rings of child nodes level-by-level.",
       href: "/bfs",
-      icon: <Network className="h-6 w-6 text-emerald-400" />,
+      icon: <Network className="h-6 w-6 text-emerald-500 dark:text-emerald-400" />,
       svgPreview: (
-        <svg viewBox="0 0 200 120" className="w-full h-full text-zinc-600 fill-none stroke-current stroke-[1.5]">
+        <svg viewBox="0 0 200 120" className="w-full h-full fill-none stroke-current stroke-[1.5] text-zinc-400 dark:text-zinc-600">
           {/* Layer rings */}
           <circle cx="100" cy="60" r="28" stroke="rgba(59, 130, 246, 0.15)" strokeDasharray="3 3" />
           <circle cx="100" cy="60" r="48" stroke="rgba(59, 130, 246, 0.08)" strokeDasharray="3 3" />
           {/* Center Start Node */}
           <circle cx="100" cy="60" r="5" fill="#f97316" stroke="#f97316" />
           {/* Layer 1 Nodes */}
-          <line x1="100" y1="60" x2="80" y2="40" stroke="rgba(63, 63, 70, 0.4)" />
-          <line x1="100" y1="60" x2="120" y2="40" stroke="rgba(63, 63, 70, 0.4)" />
-          <line x1="100" y1="60" x2="100" y2="88" stroke="rgba(63, 63, 70, 0.4)" />
+          <line x1="100" y1="60" x2="80" y2="40" className="stroke-zinc-300 dark:stroke-zinc-700/60" />
+          <line x1="100" y1="60" x2="120" y2="40" className="stroke-zinc-300 dark:stroke-zinc-700/60" />
+          <line x1="100" y1="60" x2="100" y2="88" className="stroke-zinc-300 dark:stroke-zinc-700/60" />
           <circle cx="80" cy="40" r="4.5" fill="#3b82f6" stroke="#3b82f6" />
           <circle cx="120" cy="40" r="4.5" fill="#3b82f6" stroke="#3b82f6" />
           <circle cx="100" cy="88" r="4.5" fill="#3b82f6" stroke="#3b82f6" />
           {/* Layer 2 Nodes */}
-          <line x1="80" y1="40" x2="55" y2="35" stroke="rgba(63, 63, 70, 0.2)" />
-          <line x1="120" y1="40" x2="145" y2="35" stroke="rgba(63, 63, 70, 0.2)" />
-          <circle cx="55" cy="35" r="4" fill="#3f3f46" stroke="#3f3f46" />
-          <circle cx="145" cy="35" r="4" fill="#3f3f46" stroke="#3f3f46" />
+          <line x1="80" y1="40" x2="55" y2="35" className="stroke-zinc-200 dark:stroke-zinc-700/30" />
+          <line x1="120" y1="40" x2="145" y2="35" className="stroke-zinc-200 dark:stroke-zinc-700/30" />
+          <circle cx="55" cy="35" r="4" className="fill-zinc-400 stroke-zinc-400 dark:fill-zinc-600 dark:stroke-zinc-600" />
+          <circle cx="145" cy="35" r="4" className="fill-zinc-400 stroke-zinc-400 dark:fill-zinc-600 dark:stroke-zinc-600" />
         </svg>
       )
     },
@@ -337,9 +341,9 @@ export default function Home() {
       title: "Depth-First Search (DFS)",
       description: "Explores branches deeply down vertical paths before backtracking to branches.",
       href: "/dfs",
-      icon: <GitFork className="h-6 w-6 text-emerald-400" />,
+      icon: <GitFork className="h-6 w-6 text-emerald-500 dark:text-emerald-400" />,
       svgPreview: (
-        <svg viewBox="0 0 200 120" className="w-full h-full text-zinc-600 fill-none stroke-current stroke-[1.5]">
+        <svg viewBox="0 0 200 120" className="w-full h-full fill-none stroke-current stroke-[1.5] text-zinc-400 dark:text-zinc-600">
           {/* Root node */}
           <circle cx="100" cy="20" r="5" fill="#3b82f6" stroke="#3b82f6" />
           {/* Left path */}
@@ -349,11 +353,11 @@ export default function Home() {
           <line x1="60" y1="55" x2="35" y2="95" stroke="#10b981" strokeWidth="2" />
           <circle cx="35" cy="95" r="4" fill="#10b981" stroke="#10b981" />
           {/* Unexplored branch */}
-          <line x1="60" y1="55" x2="85" y2="95" stroke="rgba(63, 63, 70, 0.3)" />
-          <circle cx="85" cy="95" r="4" fill="#3f3f46" stroke="#3f3f46" />
+          <line x1="60" y1="55" x2="85" y2="95" className="stroke-zinc-300 dark:stroke-zinc-700/50" />
+          <circle cx="85" cy="95" r="4" className="fill-zinc-400 stroke-zinc-400 dark:fill-zinc-600 dark:stroke-zinc-600" />
           {/* Right unexplored path */}
-          <line x1="100" y1="20" x2="140" y2="55" stroke="rgba(63, 63, 70, 0.3)" />
-          <circle cx="140" cy="55" r="4.5" fill="#3f3f46" stroke="#3f3f46" />
+          <line x1="100" y1="20" x2="140" y2="55" className="stroke-zinc-300 dark:stroke-zinc-700/50" />
+          <circle cx="140" cy="55" r="4.5" className="fill-zinc-400 stroke-zinc-400 dark:fill-zinc-600 dark:stroke-zinc-600" />
         </svg>
       )
     },
@@ -361,65 +365,65 @@ export default function Home() {
       title: "Dijkstra's Algorithm",
       description: "Computes absolute shortest weighted route via cost sum accumulation.",
       href: "/dijkstra",
-      icon: <Route className="h-6 w-6 text-emerald-400" />,
+      icon: <Route className="h-6 w-6 text-emerald-500 dark:text-emerald-400" />,
       svgPreview: (
-        <svg viewBox="0 0 200 120" className="w-full h-full text-zinc-550 fill-none stroke-current stroke-[1.5]">
+        <svg viewBox="0 0 200 120" className="w-full h-full fill-none stroke-current stroke-[1.5] text-zinc-400 dark:text-zinc-600">
           {/* Node connections with weights */}
           <line x1="30" y1="60" x2="90" y2="25" stroke="#10b981" strokeWidth="2" />
-          <line x1="30" y1="60" x2="90" y2="95" stroke="rgba(63, 63, 70, 0.3)" />
+          <line x1="30" y1="60" x2="90" y2="95" className="stroke-zinc-300 dark:stroke-zinc-700/50" />
           <line x1="90" y1="25" x2="170" y2="60" stroke="#10b981" strokeWidth="2" />
-          <line x1="90" y1="95" x2="170" y2="60" stroke="rgba(63, 63, 70, 0.3)" />
+          <line x1="90" y1="95" x2="170" y2="60" className="stroke-zinc-300 dark:stroke-zinc-700/50" />
           {/* Nodes */}
           <circle cx="30" cy="60" r="5" fill="#3b82f6" stroke="#3b82f6" />
           <circle cx="90" cy="25" r="4.5" fill="#10b981" stroke="#10b981" />
-          <circle cx="90" cy="95" r="4.5" fill="#3f3f46" stroke="#3f3f46" />
+          <circle cx="90" cy="95" r="4.5" className="fill-zinc-400 stroke-zinc-400 dark:fill-zinc-600 dark:stroke-zinc-600" />
           <circle cx="170" cy="60" r="5" fill="#10b981" stroke="#10b981" />
           {/* Text weights */}
-          <text x="50" y="37" className="text-[9px] fill-zinc-400 stroke-none font-bold">2</text>
-          <text x="50" y="87" className="text-[9px] fill-zinc-400 stroke-none font-bold">7</text>
-          <text x="135" y="37" className="text-[9px] fill-zinc-400 stroke-none font-bold">3</text>
-          <text x="135" y="87" className="text-[9px] fill-zinc-400 stroke-none font-bold">1</text>
+          <text x="50" y="37" className="text-[9px] fill-zinc-500 dark:fill-zinc-400 stroke-none font-bold">2</text>
+          <text x="50" y="87" className="text-[9px] fill-zinc-500 dark:fill-zinc-400 stroke-none font-bold">7</text>
+          <text x="135" y="37" className="text-[9px] fill-zinc-500 dark:fill-zinc-400 stroke-none font-bold">3</text>
+          <text x="135" y="87" className="text-[9px] fill-zinc-500 dark:fill-zinc-400 stroke-none font-bold">1</text>
         </svg>
       )
     },
   ]
 
   return (
-    <div className="bg-zinc-950 text-zinc-100 min-h-screen selection:bg-emerald-500/30 selection:text-emerald-400">
+    <div className="bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 min-h-screen selection:bg-emerald-500/30 selection:text-emerald-600 dark:selection:text-emerald-400">
       {/* Hero Section */}
-      <section className="relative py-20 lg:py-28 overflow-hidden border-b border-zinc-900 bg-gradient-to-b from-zinc-950 via-zinc-900/10 to-zinc-950">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-emerald-950/20 via-zinc-950/0 to-zinc-950/0 pointer-events-none" />
+      <section className="relative py-20 lg:py-28 overflow-hidden border-b border-zinc-200 dark:border-zinc-900 bg-gradient-to-b from-white via-zinc-50/50 to-white dark:from-zinc-950 dark:via-zinc-900/10 dark:to-zinc-950">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-emerald-100/30 via-transparent to-transparent dark:from-emerald-950/20 dark:via-zinc-950/0 dark:to-zinc-950/0 pointer-events-none" />
         
         <div className="container max-w-7xl mx-auto px-4 relative">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             
             {/* Left Info Column */}
             <div className="space-y-6 text-left">
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-xs text-emerald-400 font-bold tracking-wide">
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-xs text-emerald-600 dark:text-emerald-400 font-bold tracking-wide">
                 <Star className="w-3.5 h-3.5 fill-current" />
                 State-of-the-Art Visualizer
               </div>
               
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
                 Master{" "}
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-500 dark:from-emerald-400 dark:via-teal-300 dark:to-cyan-400">
                   Graph Algorithms
                 </span>
                 {" "}With Interactive Tracing
               </h1>
               
-              <p className="text-lg text-zinc-400 max-w-[550px] leading-relaxed">
+              <p className="text-lg text-zinc-500 dark:text-zinc-400 max-w-[550px] leading-relaxed">
                 Step inside the graph logic. Play traversal animations, trace runtime code variables in C++, Python, and Java, and customize nodes dynamically.
               </p>
               
               <div className="flex flex-wrap gap-4 pt-2">
-                <Button size="lg" asChild className="bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold transition-transform hover:-translate-y-0.5">
+                <Button size="lg" asChild className="bg-emerald-500 hover:bg-emerald-400 text-white dark:text-zinc-950 font-bold transition-transform hover:-translate-y-0.5">
                   <Link href="/algorithms">
                     Explore Visualizers
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
-                <Button size="lg" variant="outline" asChild className="border-zinc-800 text-zinc-300 hover:bg-zinc-900/60 transition-transform hover:-translate-y-0.5">
+                <Button size="lg" variant="outline" asChild className="border-zinc-300 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900/60 transition-transform hover:-translate-y-0.5">
                   <Link href="/about">
                     Learn How it Works
                   </Link>
@@ -437,47 +441,47 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 border-b border-zinc-900 relative">
+      <section className="py-20 border-b border-zinc-200 dark:border-zinc-900 relative">
         <div className="container max-w-7xl mx-auto px-4">
           <div className="text-center mb-16 space-y-4">
             <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight">
               Interactive Learning Ecosystem
             </h2>
-            <p className="text-lg text-zinc-400 max-w-[700px] mx-auto">
+            <p className="text-lg text-zinc-500 dark:text-zinc-400 max-w-[700px] mx-auto">
               Our workspace bridges math and syntax seamlessly, making complex graph pathways intuitive.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Feature 1 */}
-            <div className="flex flex-col items-start p-6 rounded-2xl border border-zinc-900 bg-zinc-900/20 backdrop-blur hover:border-emerald-500/30 transition-all duration-300 group shadow-lg">
+            <div className="flex flex-col items-start p-6 rounded-2xl border border-zinc-200 dark:border-zinc-900 bg-zinc-50/50 dark:bg-zinc-900/20 backdrop-blur hover:border-emerald-500/30 transition-all duration-300 group shadow-lg">
               <div className="h-10 w-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-                <GitGraph className="h-5 w-5 text-emerald-400" />
+                <GitGraph className="h-5 w-5 text-emerald-500 dark:text-emerald-400" />
               </div>
-              <h3 className="text-lg font-bold mb-2 text-zinc-200">Step Tracing Console</h3>
-              <p className="text-sm text-zinc-400 leading-relaxed">
+              <h3 className="text-lg font-bold mb-2 text-zinc-800 dark:text-zinc-200">Step Tracing Console</h3>
+              <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
                 Slow down, fast-forward, or step frame-by-frame. Trace which parts of the implementation code run in real-time.
               </p>
             </div>
 
             {/* Feature 2 */}
-            <div className="flex flex-col items-start p-6 rounded-2xl border border-zinc-900 bg-zinc-900/20 backdrop-blur hover:border-emerald-500/30 transition-all duration-300 group shadow-lg">
+            <div className="flex flex-col items-start p-6 rounded-2xl border border-zinc-200 dark:border-zinc-900 bg-zinc-50/50 dark:bg-zinc-900/20 backdrop-blur hover:border-emerald-500/30 transition-all duration-300 group shadow-lg">
               <div className="h-10 w-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-                <Code className="h-5 w-5 text-emerald-400" />
+                <Code className="h-5 w-5 text-emerald-500 dark:text-emerald-400" />
               </div>
-              <h3 className="text-lg font-bold mb-2 text-zinc-200">Multi-Language Code</h3>
-              <p className="text-sm text-zinc-400 leading-relaxed">
+              <h3 className="text-lg font-bold mb-2 text-zinc-800 dark:text-zinc-200">Multi-Language Code</h3>
+              <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
                 Compare variables and structures inside clean C++, Java, Python, C, C# or JavaScript snippet consoles instantly.
               </p>
             </div>
 
             {/* Feature 3 */}
-            <div className="flex flex-col items-start p-6 rounded-2xl border border-zinc-900 bg-zinc-900/20 backdrop-blur hover:border-emerald-500/30 transition-all duration-300 group shadow-lg">
+            <div className="flex flex-col items-start p-6 rounded-2xl border border-zinc-200 dark:border-zinc-900 bg-zinc-50/50 dark:bg-zinc-900/20 backdrop-blur hover:border-emerald-500/30 transition-all duration-300 group shadow-lg">
               <div className="h-10 w-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-                <Palette className="h-5 w-5 text-emerald-400" />
+                <Palette className="h-5 w-5 text-emerald-500 dark:text-emerald-400" />
               </div>
-              <h3 className="text-lg font-bold mb-2 text-zinc-200">Interactive Canvas</h3>
-              <p className="text-sm text-zinc-400 leading-relaxed">
+              <h3 className="text-lg font-bold mb-2 text-zinc-800 dark:text-zinc-200">Interactive Canvas</h3>
+              <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
                 Add, remove, drag, and connect nodes in a weighted or unweighted canvas sandbox to model custom graph scenarios.
               </p>
             </div>
@@ -486,36 +490,36 @@ export default function Home() {
       </section>
 
       {/* Algorithms Showcase Section */}
-      <section className="py-20 bg-zinc-900/10 relative border-b border-zinc-900">
+      <section className="py-20 bg-zinc-50/50 dark:bg-zinc-900/10 relative border-b border-zinc-200 dark:border-zinc-900">
         <div className="container max-w-7xl mx-auto px-4">
           <div className="text-center mb-16 space-y-4">
             <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight">Explore Traversers</h2>
-            <p className="text-lg text-zinc-400 max-w-[700px] mx-auto">
+            <p className="text-lg text-zinc-500 dark:text-zinc-400 max-w-[700px] mx-auto">
               Select one of our core visualizers to trace heuristics, radial searches, or shortest-paths.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {algorithms.map((algorithm) => (
-              <Card key={algorithm.href} className="border-zinc-900 bg-zinc-900/30 backdrop-blur hover:border-zinc-800 transition-all duration-200 flex flex-col group overflow-hidden shadow-xl">
+              <Card key={algorithm.href} className="border-zinc-200 dark:border-zinc-900 bg-white/80 dark:bg-zinc-900/30 backdrop-blur hover:border-zinc-300 dark:hover:border-zinc-800 transition-all duration-200 flex flex-col group overflow-hidden shadow-xl">
                 <CardHeader className="pb-3">
                   <div className="inline-flex items-center gap-2 mb-2">
                     <div className="p-2 bg-emerald-500/10 border border-emerald-500/20 rounded-lg group-hover:scale-105 transition-transform">
                       {algorithm.icon}
                     </div>
                   </div>
-                  <CardTitle className="text-lg font-bold text-zinc-100">{algorithm.title}</CardTitle>
-                  <CardDescription className="text-xs text-zinc-400 leading-relaxed h-[36px] overflow-hidden">
+                  <CardTitle className="text-lg font-bold text-zinc-900 dark:text-zinc-100">{algorithm.title}</CardTitle>
+                  <CardDescription className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed h-[36px] overflow-hidden">
                     {algorithm.description}
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="pb-4">
-                  <div className="h-32 bg-zinc-950/80 rounded-xl border border-zinc-800/80 flex items-center justify-center p-3 overflow-hidden shadow-inner group-hover:border-zinc-800 transition-colors">
+                  <div className="h-32 bg-zinc-100/80 dark:bg-zinc-950/80 rounded-xl border border-zinc-200/80 dark:border-zinc-800/80 flex items-center justify-center p-3 overflow-hidden shadow-inner group-hover:border-zinc-300 dark:group-hover:border-zinc-800 transition-colors">
                     {algorithm.svgPreview}
                   </div>
                 </CardContent>
                 <CardFooter className="mt-auto">
-                  <Button asChild className="w-full bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold transition-all">
+                  <Button asChild className="w-full bg-emerald-500 hover:bg-emerald-400 text-white dark:text-zinc-950 font-bold transition-all">
                     <Link href={algorithm.href}>Launch Visualizer</Link>
                   </Button>
                 </CardFooter>
@@ -524,7 +528,7 @@ export default function Home() {
           </div>
 
           <div className="mt-14 text-center">
-            <Button asChild variant="outline" size="lg" className="border-zinc-850 text-zinc-300 hover:bg-zinc-900/60 transition-all hover:translate-x-0.5">
+            <Button asChild variant="outline" size="lg" className="border-zinc-300 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900/60 transition-all hover:translate-x-0.5">
               <Link href="/algorithms">
                 View Other Algorithms
                 <ArrowRight className="ml-2 h-4 w-4" />
@@ -535,65 +539,65 @@ export default function Home() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 border-b border-zinc-900 relative">
+      <section className="py-20 border-b border-zinc-200 dark:border-zinc-900 relative">
         <div className="container max-w-7xl mx-auto px-4">
           <div className="text-center mb-16 space-y-4">
             <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight">Approved by Academics</h2>
-            <p className="text-lg text-zinc-400 max-w-[700px] mx-auto">
+            <p className="text-lg text-zinc-500 dark:text-zinc-400 max-w-[700px] mx-auto">
               Students, engineers, and educators leverage GrappAlgo to make graph models click.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Testimonial 1 */}
-            <Card className="border-zinc-900 bg-zinc-900/20 backdrop-blur shadow-xl hover:border-zinc-850 transition-colors duration-250">
+            <Card className="border-zinc-200 dark:border-zinc-900 bg-white/80 dark:bg-zinc-900/20 backdrop-blur shadow-xl hover:border-zinc-300 dark:hover:border-zinc-850 transition-colors duration-250">
               <CardContent className="pt-6">
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="h-11 w-11 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                  <div className="h-11 w-11 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500 dark:text-emerald-400">
                     <User className="h-5.5 w-5.5" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-zinc-200 text-sm">Sarah Johnson</h4>
-                    <p className="text-[11px] text-zinc-400 font-medium">CS Student, University of Washington</p>
+                    <h4 className="font-bold text-zinc-800 dark:text-zinc-200 text-sm">Sarah Johnson</h4>
+                    <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium">CS Student, University of Washington</p>
                   </div>
                 </div>
-                <p className="text-sm text-zinc-400 leading-relaxed italic">
+                <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed italic">
                   "This platform made understanding BFS and Dijkstra so much easier. The side-by-side tracer helped me visual-trace the call stack of nested functions."
                 </p>
               </CardContent>
             </Card>
 
             {/* Testimonial 2 */}
-            <Card className="border-zinc-900 bg-zinc-900/20 backdrop-blur shadow-xl hover:border-zinc-850 transition-colors duration-250">
+            <Card className="border-zinc-200 dark:border-zinc-900 bg-white/80 dark:bg-zinc-900/20 backdrop-blur shadow-xl hover:border-zinc-300 dark:hover:border-zinc-850 transition-colors duration-250">
               <CardContent className="pt-6">
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="h-11 w-11 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                  <div className="h-11 w-11 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500 dark:text-emerald-400">
                     <User className="h-5.5 w-5.5" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-zinc-200 text-sm">Michael Chen</h4>
-                    <p className="text-[11px] text-zinc-400 font-medium">Front-End Engineer, Tech Lead</p>
+                    <h4 className="font-bold text-zinc-800 dark:text-zinc-200 text-sm">Michael Chen</h4>
+                    <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium">Front-End Engineer, Tech Lead</p>
                   </div>
                 </div>
-                <p className="text-sm text-zinc-400 leading-relaxed italic">
+                <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed italic">
                   "I use the visualizer to prepare for technical interviews. Being able to choose C++ or Python code snippet view fits right into my review stack."
                 </p>
               </CardContent>
             </Card>
 
             {/* Testimonial 3 */}
-            <Card className="border-zinc-900 bg-zinc-900/20 backdrop-blur shadow-xl hover:border-zinc-850 transition-colors duration-250">
+            <Card className="border-zinc-200 dark:border-zinc-900 bg-white/80 dark:bg-zinc-900/20 backdrop-blur shadow-xl hover:border-zinc-300 dark:hover:border-zinc-850 transition-colors duration-250">
               <CardContent className="pt-6">
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="h-11 w-11 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                  <div className="h-11 w-11 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500 dark:text-emerald-400">
                     <User className="h-5.5 w-5.5" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-zinc-200 text-sm">Dr. Emily Rodriguez</h4>
-                    <p className="text-[11px] text-zinc-400 font-medium">Professor of Algorithms & Data Structures</p>
+                    <h4 className="font-bold text-zinc-800 dark:text-zinc-200 text-sm">Dr. Emily Rodriguez</h4>
+                    <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium">Professor of Algorithms & Data Structures</p>
                   </div>
                 </div>
-                <p className="text-sm text-zinc-400 leading-relaxed italic">
+                <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed italic">
                   "I highly recommend this platform in my lectures. The custom canvas is perfect to demonstrate Dijkstra edge relaxation scenarios live."
                 </p>
               </CardContent>
@@ -603,11 +607,11 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 lg:py-28 relative overflow-hidden bg-zinc-950">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom,_var(--tw-gradient-stops))] from-emerald-950/15 via-zinc-950/0 to-zinc-950/0 pointer-events-none" />
+      <section className="py-20 lg:py-28 relative overflow-hidden bg-white dark:bg-zinc-950">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom,_var(--tw-gradient-stops))] from-emerald-100/20 via-transparent to-transparent dark:from-emerald-950/15 dark:via-zinc-950/0 dark:to-zinc-950/0 pointer-events-none" />
         
         <div className="container max-w-5xl mx-auto px-4 relative text-center space-y-6">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-500/10 border border-emerald-500/25 rounded-full text-xs text-emerald-400 font-bold uppercase tracking-wider">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-500/10 border border-emerald-500/25 rounded-full text-xs text-emerald-600 dark:text-emerald-400 font-bold uppercase tracking-wider">
             <ShieldCheck className="w-3.5 h-3.5" />
             100% Free & Open-Source
           </div>
@@ -616,15 +620,15 @@ export default function Home() {
             Ready to Master Graph Logic?
           </h2>
           
-          <p className="text-base text-zinc-400 max-w-[600px] mx-auto leading-relaxed">
+          <p className="text-base text-zinc-500 dark:text-zinc-400 max-w-[600px] mx-auto leading-relaxed">
             Jump in and start visualizing right away. No account sign-up, email configuration, or installation required.
           </p>
           
           <div className="flex flex-col sm:flex-row justify-center gap-4 pt-4">
-            <Button size="lg" asChild className="bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold transition-transform hover:-translate-y-0.5">
+            <Button size="lg" asChild className="bg-emerald-500 hover:bg-emerald-400 text-white dark:text-zinc-950 font-bold transition-transform hover:-translate-y-0.5">
               <Link href="/algorithms">Get Started Now</Link>
             </Button>
-            <Button size="lg" variant="outline" asChild className="border-zinc-800 text-zinc-300 hover:bg-zinc-900/60 transition-transform hover:-translate-y-0.5">
+            <Button size="lg" variant="outline" asChild className="border-zinc-300 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900/60 transition-transform hover:-translate-y-0.5">
               <Link href="/about">Read Documentation</Link>
             </Button>
           </div>

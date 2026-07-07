@@ -1371,7 +1371,7 @@ export default function GraphCanvas({
   const [isInitialized, setIsInitialized] = useState(false)
   const [copied, setCopied] = useState(false)
   const [selectedLang, setSelectedLang] = useState<string>("javascript")
-  const { theme } = useTheme()
+  const { resolvedTheme: theme } = useTheme()
 
   // Initialize the graph once
   useEffect(() => {

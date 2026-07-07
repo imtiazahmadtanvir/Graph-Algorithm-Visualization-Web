@@ -90,7 +90,7 @@ export default function Footer() {
             <p className="text-sm text-muted-foreground">Stay updated with our latest algorithms and features.</p>
             <div className="flex space-x-2">
               <Input placeholder="Your email" type="email" className="max-w-[220px]" />
-              <Button variant="default" className="bg-[#4ade80] hover:bg-[#22c55e] text-white">
+              <Button variant="default" className="bg-[#4ade80] hover:bg-[#22c55e] text-white dark:text-zinc-950">
                 <Mail className="h-4 w-4 mr-2" />
                 Subscribe
               </Button>
