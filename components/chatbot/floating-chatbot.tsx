@@ -59,8 +59,8 @@ function FloatingChatbot() {
           <div
             className={cn(
               "fixed z-50 flex flex-col overflow-hidden",
-              "bg-white dark:bg-zinc-900 shadow-2xl",
-              "border border-zinc-200 dark:border-zinc-800",
+              "bg-zinc-950 shadow-2xl",
+              "border border-zinc-800",
               "animate-in slide-in-from-bottom-5 fade-in duration-300",
               // Mobile: nearly full screen
               isMobile
