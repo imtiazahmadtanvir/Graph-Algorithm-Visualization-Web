@@ -81,6 +81,16 @@ export default function Footer() {
                   Dijkstra's Algorithm
                 </Link>
               </li>
+              <li>
+                <Link href="/prims" className="text-sm text-zinc-550 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+                  Prim's MST
+                </Link>
+              </li>
+              <li>
+                <Link href="/graph-coloring" className="text-sm text-zinc-550 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+                  Graph Coloring
+                </Link>
+              </li>
             </ul>
           </div>
 
