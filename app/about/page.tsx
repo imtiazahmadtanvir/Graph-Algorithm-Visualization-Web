@@ -26,7 +26,7 @@ export default function AboutPage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="bg-[#f0f9f0] dark:bg-[#0a1f0a] py-16 md:py-24">
+      <section className="bg-[#f0f9f0] dark:bg-black py-16 md:py-24">
         <div className="container">
           <div className="max-w-[800px] mx-auto text-center space-y-6">
             <h1 className="text-4xl md:text-5xl font-bold">About GraphAlgo</h1>
@@ -69,7 +69,7 @@ export default function AboutPage() {
       </section>
 
       {/* Our Mission Section */}
-      <section className="py-16 md:py-24 bg-[#f0f9f0] dark:bg-[#0a1f0a]">
+      <section className="py-16 md:py-24 bg-[#f0f9f0] dark:bg-black">
         <div className="container">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Our Mission</h2>
@@ -151,7 +151,7 @@ export default function AboutPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 md:py-24 bg-[#f0f9f0] dark:bg-[#0a1f0a]">
+      <section className="py-16 md:py-24 bg-[#f0f9f0] dark:bg-black">
         <div className="container">
           <div className="max-w-[800px] mx-auto text-center space-y-6">
             <h2 className="text-3xl font-bold">Join Our Community</h2>

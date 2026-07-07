@@ -55,7 +55,7 @@ export default function AlgorithmsPage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="bg-[#f0f9f0] dark:bg-[#0a1f0a] py-16 md:py-24">
+      <section className="bg-[#f0f9f0] dark:bg-black py-16 md:py-24">
         <div className="container">
           <div className="max-w-[800px] mx-auto text-center space-y-6">
             <h1 className="text-4xl md:text-5xl font-bold">Graph Algorithms</h1>
