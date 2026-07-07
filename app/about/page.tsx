@@ -1,32 +1,13 @@
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { GitGraph, BookOpen, Code, User } from "lucide-react"
+import { GitGraph, BookOpen, Code, Github, Linkedin, Globe, Mail } from "lucide-react"
 
 export default function AboutPage() {
-  const teamMembers = [
-    {
-      name: "Alex Johnson",
-      role: "Founder & Lead Developer",
-    },
-    {
-      name: "Maria Garcia",
-      role: "Algorithm Specialist",
-    },
-    {
-      name: "David Kim",
-      role: "UI/UX Designer",
-    },
-    {
-      name: "Sarah Williams",
-      role: "Educational Content Creator",
-    },
-  ]
-
   return (
     <>
       {/* Hero Section */}
-      <section className="bg-[#f0f9f0] dark:bg-black py-16 md:py-24">
+      <section className="bg-[#f0f9f0] dark:bg-black py-16 md:py-24 transition-colors duration-200">
         <div className="container">
           <div className="max-w-[800px] mx-auto text-center space-y-6">
             <h1 className="text-4xl md:text-5xl font-bold">About GraphAlgo</h1>
@@ -38,7 +19,7 @@ export default function AboutPage() {
       </section>
 
       {/* Our Story Section */}
-      <section className="py-16 md:py-24">
+      <section className="hidden py-16 md:py-24">
         <div className="container">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
@@ -56,7 +37,7 @@ export default function AboutPage() {
                 students, educators, and professionals worldwide.
               </p>
             </div>
-            <div className="relative h-[400px] w-400">
+            <div className="relative h-[400px] w-full">
               <Image
                 src="/home.png"
                 alt="Our Story"
@@ -69,7 +50,7 @@ export default function AboutPage() {
       </section>
 
       {/* Our Mission Section */}
-      <section className="py-16 md:py-24 bg-[#f0f9f0] dark:bg-black">
+      <section className="py-16 md:py-24 bg-[#f0f9f0] dark:bg-black transition-colors duration-200">
         <div className="container">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Our Mission</h2>
@@ -79,10 +60,10 @@ export default function AboutPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card className="bg-white dark:bg-card">
+            <Card className="bg-white dark:bg-zinc-950 border border-[#4ade80]/20">
               <CardContent className="pt-6">
                 <div className="flex flex-col items-center text-center space-y-4">
-                  <div className="h-12 w-12 rounded-full bg-[#f0f9f0] dark:bg-[#0a1f0a] flex items-center justify-center">
+                  <div className="h-12 w-12 rounded-full bg-[#f0f9f0] dark:bg-zinc-900 flex items-center justify-center">
                     <BookOpen className="h-6 w-6 text-[#4ade80]" />
                   </div>
                   <h3 className="text-xl font-bold">Education</h3>
@@ -93,10 +74,10 @@ export default function AboutPage() {
               </CardContent>
             </Card>
 
-            <Card className="bg-white dark:bg-card">
+            <Card className="bg-white dark:bg-zinc-950 border border-[#4ade80]/20">
               <CardContent className="pt-6">
                 <div className="flex flex-col items-center text-center space-y-4">
-                  <div className="h-12 w-12 rounded-full bg-[#f0f9f0] dark:bg-[#0a1f0a] flex items-center justify-center">
+                  <div className="h-12 w-12 rounded-full bg-[#f0f9f0] dark:bg-zinc-900 flex items-center justify-center">
                     <GitGraph className="h-6 w-6 text-[#4ade80]" />
                   </div>
                   <h3 className="text-xl font-bold">Visualization</h3>
@@ -107,10 +88,10 @@ export default function AboutPage() {
               </CardContent>
             </Card>
 
-            <Card className="bg-white dark:bg-card">
+            <Card className="bg-white dark:bg-zinc-950 border border-[#4ade80]/20">
               <CardContent className="pt-6">
                 <div className="flex flex-col items-center text-center space-y-4">
-                  <div className="h-12 w-12 rounded-full bg-[#f0f9f0] dark:bg-[#0a1f0a] flex items-center justify-center">
+                  <div className="h-12 w-12 rounded-full bg-[#f0f9f0] dark:bg-zinc-900 flex items-center justify-center">
                     <Code className="h-6 w-6 text-[#4ade80]" />
                   </div>
                   <h3 className="text-xl font-bold">Innovation</h3>
@@ -124,34 +105,65 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Team Section */}
+      {/* Developer Section */}
       <section className="py-16 md:py-24">
-        <div className="container">
+        <div className="container max-w-4xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Meet Our Team</h2>
-            <p className="text-xl text-muted-foreground max-w-[800px] mx-auto">
-              The passionate individuals behind GraphAlgo who are dedicated to making algorithm learning accessible.
+            <h2 className="text-3xl font-bold mb-4">Meet the Developer</h2>
+            <p className="text-xl text-muted-foreground">
+              The creator behind the interactive GraphAlgo platform.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {teamMembers.map((member, index) => (
-              <div key={index} className="flex flex-col items-center text-center space-y-4">
-                <div className="h-32 w-32 rounded-full bg-[#f0f9f0] dark:bg-[#0a1f0a] flex items-center justify-center">
-                  <User className="h-16 w-16 text-[#4ade80]" />
+          <Card className="border border-[#4ade80]/20 bg-white dark:bg-zinc-950 shadow-xl overflow-hidden">
+            <CardContent className="p-8 md:p-12">
+              <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+                <div className="h-40 w-40 rounded-full bg-[#f0f9f0] dark:bg-zinc-900 border border-[#4ade80]/25 flex items-center justify-center flex-shrink-0">
+                  <Code className="h-20 w-20 text-[#4ade80]" />
                 </div>
-                <div>
-                  <h3 className="text-xl font-bold">{member.name}</h3>
-                  <p className="text-muted-foreground">{member.role}</p>
+                <div className="space-y-4 text-center md:text-left flex-1">
+                  <div>
+                    <h3 className="text-2xl font-bold text-zinc-900 dark:text-white">Imtiaz Ahmad Tanvir</h3>
+                    <p className="text-[#4ade80] font-semibold">Full-Stack Developer</p>
+                  </div>
+                  <p className="text-muted-foreground leading-relaxed">
+                    A passionate software developer specialized in building visual education platforms, algorithm traversers, and state-of-the-art interactive front-ends. Imtiaz creates tools that bridge theory with interactive execution to make complex computer science themes simple and accessible.
+                  </p>
+                  <div className="flex flex-wrap justify-center md:justify-start gap-4 pt-2">
+                    <Button variant="outline" size="sm" asChild className="border-[#4ade80]/30 hover:bg-[#4ade80]/10 flex items-center gap-2">
+                      <a href="https://github.com/imtiazahmadtanvir" target="_blank" rel="noopener noreferrer">
+                        <Github className="h-4 w-4 text-[#4ade80]" />
+                        GitHub
+                      </a>
+                    </Button>
+                    <Button variant="outline" size="sm" asChild className="border-[#4ade80]/30 hover:bg-[#4ade80]/10 flex items-center gap-2">
+                      <a href="https://www.linkedin.com/in/imtiaz-tanveer07" target="_blank" rel="noopener noreferrer">
+                        <Linkedin className="h-4 w-4 text-[#4ade80]" />
+                        LinkedIn
+                      </a>
+                    </Button>
+                    <Button variant="outline" size="sm" asChild className="border-[#4ade80]/30 hover:bg-[#4ade80]/10 flex items-center gap-2">
+                      <a href="https://imtiaz-tanvir-portfolio.netlify.app/" target="_blank" rel="noopener noreferrer">
+                        <Globe className="h-4 w-4 text-[#4ade80]" />
+                        Portfolio
+                      </a>
+                    </Button>
+                    <Button variant="outline" size="sm" asChild className="border-[#4ade80]/30 hover:bg-[#4ade80]/10 flex items-center gap-2">
+                      <a href="mailto:imtiaz.tanvir.dev@gmail.com">
+                        <Mail className="h-4 w-4 text-[#4ade80]" />
+                        Email
+                      </a>
+                    </Button>
+                  </div>
                 </div>
               </div>
-            ))}
-          </div>
+            </CardContent>
+          </Card>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 md:py-24 bg-[#f0f9f0] dark:bg-black">
+      <section className="py-16 md:py-24 bg-[#f0f9f0] dark:bg-black transition-colors duration-200">
         <div className="container">
           <div className="max-w-[800px] mx-auto text-center space-y-6">
             <h2 className="text-3xl font-bold">Join Our Community</h2>
@@ -159,7 +171,7 @@ export default function AboutPage() {
               Be part of our growing community of algorithm enthusiasts and learners.
             </p>
             <div className="pt-4">
-              <Button size="lg" className="bg-[#4ade80] hover:bg-[#22c55e] text-white">
+              <Button size="lg" className="bg-[#4ade80] hover:bg-[#22c55e] text-white font-semibold">
                 Get Started
               </Button>
             </div>
