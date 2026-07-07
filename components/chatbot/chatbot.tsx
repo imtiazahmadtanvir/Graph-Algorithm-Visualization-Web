@@ -1,14 +1,10 @@
 "use client"
 
 import type React from "react"
-import { useEffect, useState, useRef, useCallback } from "react"
+import { useState, useRef, useCallback, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Send, AlertCircle, Loader2, Computer, GraduationCap } from "lucide-react"
+import { Send, Loader2, GitGraph, Bot } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { format } from "date-fns"
-import { MessageModal } from "./message-modal"
 
 interface Message {
   text: string
@@ -16,266 +12,190 @@ interface Message {
   timestamp: Date
 }
 
-interface PredefinedQuestion {
+interface PredefinedQA {
   question: string
   answer: string
 }
 
-export default function Chatbot() {
+const PREDEFINED_QA: PredefinedQA[] = [
+  {
+    question: "What is GraphAlgo?",
+    answer:
+      "GraphAlgo is an interactive educational platform designed to help students, educators, and enthusiasts understand graph algorithms through visual simulations, step-by-step code tracing, and hands-on graph building. You can explore algorithms like BFS, DFS, Dijkstra's, A*, Prim's, and Graph Coloring — all with beautiful animations.",
+  },
+  {
+    question: "Which algorithms are available?",
+    answer:
+      "GraphAlgo currently supports six core algorithms:\n\n• A* Pathfinding — Uses heuristics to find shortest obstacle-free paths.\n• Breadth-First Search (BFS) — Explores nodes level-by-level.\n• Depth-First Search (DFS) — Explores as deep as possible before backtracking.\n• Dijkstra's Algorithm — Finds shortest paths in weighted graphs.\n• Prim's Algorithm — Builds a minimum spanning tree.\n• Graph Coloring — Assigns colors so no adjacent nodes share a color.\n\nEach visualizer includes multi-language code tracing (JavaScript, C++, Java, Python, C, and C#).",
+  },
+  {
+    question: "Do I need coding knowledge?",
+    answer:
+      "Not at all! GraphAlgo provides an intuitive visual interface where you can build graphs, run algorithms, and watch each step animate on a canvas — no coding required. However, if you do know how to code, you'll love our side-by-side code tracer that highlights exactly which line of code is executing at each algorithm step.",
+  },
+  {
+    question: "Can I use it for teaching?",
+    answer:
+      "Absolutely! GraphAlgo is perfect for classroom demonstrations, homework assignments, and workshops. Instructors can use the interactive canvas to visually explain concepts like shortest-path relaxation, tree traversals, and greedy algorithms. The multi-language code panel also makes it easy to compare implementations across different programming languages.",
+  },
+  {
+    question: "Is GraphAlgo free to use?",
+    answer:
+      "Yes! GraphAlgo is 100% free and open-source. We believe in open education and our mission is to make learning graph algorithms accessible to everyone, everywhere. No account sign-up, no installation — just open the website and start exploring.",
+  },
+  {
+    question: "How does the code tracing work?",
+    answer:
+      "When you run an algorithm, our code tracer highlights the exact line of code being executed at each step. You can choose from 6 programming languages (JavaScript, C++, Java, Python, C, C#). The tracer also shows a step explanation describing what the algorithm is doing — like 'Visiting node 3' or 'Relaxing edge (2→5) with weight 4'. You can pause, step forward, or adjust the speed.",
+  },
+  {
+    question: "Can I build custom graphs?",
+    answer:
+      "Yes! Each algorithm visualizer comes with a pre-built example graph, but you can also create your own. Add nodes by clicking on the canvas, connect them with edges, set edge weights for weighted algorithms, and then run the algorithm to see how it works on your custom graph.",
+  },
+  {
+    question: "Does GraphAlgo work on mobile?",
+    answer:
+      "GraphAlgo is primarily optimized for desktop browsers to provide the best interactive canvas experience. While you can access it on tablets and larger mobile screens, the full graph-building and code-tracing experience is best enjoyed on a desktop or laptop.",
+  },
+]
+
+// Fuzzy matching: find the best matching predefined Q&A for free-text input
+function findBestMatch(input: string): PredefinedQA | null {
+  const normalizedInput = input.toLowerCase().trim()
+
+  // Direct keyword matching with scoring
+  let bestMatch: PredefinedQA | null = null
+  let bestScore = 0
+
+  for (const qa of PREDEFINED_QA) {
+    const normalizedQuestion = qa.question.toLowerCase()
+    const normalizedAnswer = qa.answer.toLowerCase()
+
+    // Exact match
+    if (normalizedInput === normalizedQuestion) return qa
+
+    // Calculate a simple keyword overlap score
+    const inputWords = normalizedInput.split(/\s+/).filter((w) => w.length > 2)
+    let score = 0
+
+    for (const word of inputWords) {
+      if (normalizedQuestion.includes(word)) score += 3
+      if (normalizedAnswer.includes(word)) score += 1
+    }
+
+    // Bonus for key topic words
+    const topicMap: Record<string, string[]> = {
+      "What is GraphAlgo?": ["graphalgo", "what", "about", "platform", "this"],
+      "Which algorithms are available?": ["algorithm", "which", "available", "support", "list", "bfs", "dfs", "dijkstra", "astar", "prim", "coloring"],
+      "Do I need coding knowledge?": ["coding", "code", "programming", "knowledge", "need", "require", "beginner"],
+      "Can I use it for teaching?": ["teach", "teaching", "classroom", "education", "instructor", "professor", "school", "university"],
+      "Is GraphAlgo free to use?": ["free", "cost", "price", "pay", "open-source", "opensource"],
+      "How does the code tracing work?": ["trace", "tracing", "code", "highlight", "step", "debug", "line"],
+      "Can I build custom graphs?": ["custom", "build", "create", "own", "graph", "node", "edge", "add"],
+      "Does GraphAlgo work on mobile?": ["mobile", "phone", "tablet", "responsive", "android", "ios", "ipad"],
+    }
+
+    const topics = topicMap[qa.question] || []
+    for (const topic of topics) {
+      if (normalizedInput.includes(topic)) score += 5
+    }
+
+    if (score > bestScore) {
+      bestScore = score
+      bestMatch = qa
+    }
+  }
+
+  // Only return a match if the score is above a minimum threshold
+  return bestScore >= 5 ? bestMatch : null
+}
+
+export default function Chatbot({ onClose }: { onClose?: () => void }) {
   const [messages, setMessages] = useState<Message[]>([])
   const [userInput, setUserInput] = useState("")
-  const [sessionId, setSessionId] = useState<string | null>(null)
-  const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [showSuggestions, setShowSuggestions] = useState(true)
-  const [selectedMessage, setSelectedMessage] = useState<Message | null>(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [screenSize, setScreenSize] = useState<"small" | "medium" | "large">("medium")
   const messagesEndRef = useRef<HTMLDivElement>(null)
-  const scrollAreaRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
-
-  // Define predefined questions and answers
-  const predefinedQuestions: PredefinedQuestion[] = [
-    {
-      question: "What is GraphAlgo?",
-      answer:
-        "GraphAlgo is an interactive educational platform designed to help students and enthusiasts understand graph algorithms through visual simulations and step-by-step walkthroughs.",
-    },
-    {
-      question: "Which algorithms are available in GraphAlgo?",
-      answer:
-        "GraphAlgo supports popular graph algorithms such as Dijkstra’s Algorithm, Breadth-First Search (BFS), Depth-First Search (DFS), A*, Prim’s Algorithm, and Kruskal’s Algorithm, among others.",
-    },
-    {
-      question: "Who can use GraphAlgo?",
-      answer:
-        "GraphAlgo is designed for students, educators, and anyone interested in learning how graph algorithms work. It is beginner-friendly and suitable for both academic and self-paced learning.",
-    },
-    {
-      question: "Do I need to know coding to use GraphAlgo?",
-      answer:
-        "No prior coding knowledge is required. GraphAlgo provides an intuitive interface where users can build graphs and run algorithms visually, without writing any code.",
-    },
-    {
-      question: "Can I use GraphAlgo for teaching?",
-      answer:
-        "Yes! GraphAlgo is perfect for classroom demonstrations, assignments, and workshops. Instructors can use it to explain concepts visually and interactively.",
-    },
-    {
-      question: "Is GraphAlgo free to use?",
-      answer:
-        "Yes, GraphAlgo is a free and open-source platform. We believe in open education and aim to make learning graph algorithms accessible to everyone.",
-    },
-    {
-      question: "Can I contribute to GraphAlgo?",
-      answer:
-        "Absolutely! GraphAlgo is open-source, and contributions are welcome. You can report issues, suggest features, or submit pull requests through our GitHub repository.",
-    },
-    {
-      question: "Does GraphAlgo work on mobile devices?",
-      answer:
-        "Currently, GraphAlgo is optimized for desktop use. We are working on improving mobile compatibility for future updates.",
-    },
-  ];
-  
-
-  // Check screen size
-  useEffect(() => {
-    const checkScreenSize = () => {
-      if (window.innerWidth < 640) {
-        setScreenSize("small")
-      } else if (window.innerWidth < 1024) {
-        setScreenSize("medium")
-      } else {
-        setScreenSize("large")
-      }
-    }
-
-    // Initial check
-    checkScreenSize()
-
-    // Add event listener for window resize
-    window.addEventListener("resize", checkScreenSize)
-
-    // Cleanup
-    return () => window.removeEventListener("resize", checkScreenSize)
-  }, [])
-
-  // Initialize chat session
-  useEffect(() => {
-    let isMounted = true
-
-    const initChat = async () => {
-      if (!isMounted) return
-
-      setIsLoading(true)
-      try {
-        const response = await fetch("/api/chat", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ message: null }),
-        })
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`)
-        }
-
-        const data = await response.json()
-
-        if (data.error) {
-          throw new Error(data.error)
-        }
-
-        if (isMounted) {
-          setSessionId(data.sessionId)
-          setIsLoading(false)
-        }
-      } catch (err: any) {
-        if (isMounted) {
-          setError("Failed to initialize chat: " + err.message)
-          setIsLoading(false)
-        }
-      }
-    }
-
-    initChat()
-
-    // Focus the input field when the component mounts
-    setTimeout(() => {
-      inputRef.current?.focus()
-    }, 100)
-
-    return () => {
-      isMounted = false
-    }
-  }, [])
 
   // Scroll to bottom when messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages])
 
-  // Function to handle predefined questions directly
-  const handlePredefinedQuestion = useCallback(
-    (question: string) => {
-      // Find the matching predefined question
-      const predefinedQuestion = predefinedQuestions.find((item) => item.question.trim() === question.trim())
+  // Focus input on mount
+  useEffect(() => {
+    setTimeout(() => inputRef.current?.focus(), 200)
+  }, [])
 
-      if (!predefinedQuestion) return false
+  // Get unasked questions
+  const getUnaskedQuestions = useCallback(() => {
+    const askedQuestions = messages.filter((msg) => msg.role === "user").map((msg) => msg.text)
+    return PREDEFINED_QA.filter((item) => !askedQuestions.includes(item.question))
+  }, [messages])
 
-      // Add user message
-      const userMessage: Message = {
-        text: question,
-        role: "user",
+  // Handle clicking a predefined question
+  const handleQuestionClick = useCallback((question: string) => {
+    const qa = PREDEFINED_QA.find((item) => item.question === question)
+    if (!qa) return
+
+    const userMessage: Message = {
+      text: question,
+      role: "user",
+      timestamp: new Date(),
+    }
+
+    setMessages((prev) => [...prev, userMessage])
+    setShowSuggestions(false)
+    setIsLoading(true)
+
+    // Simulate a short delay for natural feel
+    setTimeout(() => {
+      const botMessage: Message = {
+        text: qa.answer,
+        role: "model",
+        timestamp: new Date(),
+      }
+      setMessages((prev) => [...prev, botMessage])
+      setIsLoading(false)
+      setShowSuggestions(true)
+    }, 600 + Math.random() * 400)
+  }, [])
+
+  // Handle free-text send
+  const handleSendMessage = useCallback(() => {
+    const text = userInput.trim()
+    if (!text) return
+
+    const userMessage: Message = {
+      text,
+      role: "user",
+      timestamp: new Date(),
+    }
+
+    setMessages((prev) => [...prev, userMessage])
+    setUserInput("")
+    setShowSuggestions(false)
+    setIsLoading(true)
+
+    setTimeout(() => {
+      const match = findBestMatch(text)
+
+      const botMessage: Message = {
+        text: match
+          ? match.answer
+          : "I'm sorry, I can only answer questions about GraphAlgo and its features. Try asking about our available algorithms, code tracing, custom graphs, or how to use the platform!",
+        role: "model",
         timestamp: new Date(),
       }
 
-      setMessages((prevMessages) => [...prevMessages, userMessage])
-      setUserInput("")
-
-      // Show loading indicator
-      setIsLoading(true)
-
-      // Add a small delay to simulate processing
-      setTimeout(() => {
-        // Add bot response with predefined answer
-        const botMessage: Message = {
-          text: predefinedQuestion.answer,
-          role: "model",
-          timestamp: new Date(),
-        }
-
-        setMessages((prevMessages) => [...prevMessages, botMessage])
-        setIsLoading(false)
-        setShowSuggestions(true)
-
-        // Scroll to bottom
-        setTimeout(() => {
-          messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-        }, 100)
-      }, 800)
-
-      return true
-    },
-    [predefinedQuestions],
-  )
-
-  const handleSendMessage = useCallback(
-    async (input?: string) => {
-      const messageToSend = input || userInput
-      if (!messageToSend.trim() || !sessionId) return
-
-      // Hide suggestions when sending a message
-      setShowSuggestions(false)
-
-      // Check if it's a predefined question first
-      // If it is, handle it and return early
-      const isPredefined = handlePredefinedQuestion(messageToSend)
-      if (isPredefined) return
-
-      // If not a predefined question, proceed with normal flow
-      const userMessage: Message = {
-        text: messageToSend,
-        role: "user",
-        timestamp: new Date(),
-      }
-
-      setMessages((prevMessages) => [...prevMessages, userMessage])
-      setUserInput("")
-
-      // For non-predefined questions, make the API call
-      setIsLoading(true)
-      try {
-        const response = await fetch("/api/chat", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            message: messageToSend,
-            sessionId: sessionId,
-          }),
-        })
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`)
-        }
-
-        const data = await response.json()
-
-        if (data.error) {
-          throw new Error(data.error)
-        }
-
-        const botMessage: Message = {
-          text: data.response,
-          role: "model",
-          timestamp: new Date(),
-        }
-
-        setMessages((prevMessages) => [...prevMessages, botMessage])
-
-        // Show suggestions again after receiving a response
-        setShowSuggestions(true)
-      } catch (err: any) {
-        setError("Failed to send message: " + err.message)
-      } finally {
-        setIsLoading(false)
-        // Focus the input field after sending a message
-        setTimeout(() => {
-          inputRef.current?.focus()
-          // Scroll to the bottom after a short delay to ensure the DOM has updated
-          setTimeout(() => {
-            messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-          }, 100)
-        }, 100)
-      }
-    },
-    [sessionId, userInput, handlePredefinedQuestion],
-  )
+      setMessages((prev) => [...prev, botMessage])
+      setIsLoading(false)
+      setShowSuggestions(true)
+      setTimeout(() => inputRef.current?.focus(), 100)
+    }, 700 + Math.random() * 500)
+  }, [userInput])
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
@@ -287,181 +207,178 @@ export default function Chatbot() {
     [handleSendMessage],
   )
 
-  const handlePredefinedQuestionClick = useCallback(
-    (question: string) => {
-      handlePredefinedQuestion(question)
-    },
-    [handlePredefinedQuestion],
-  )
-
-  const handleMessageClick = useCallback((message: Message) => {
-    setSelectedMessage(message)
-    setIsModalOpen(true)
-  }, [])
-
-  const closeModal = useCallback(() => {
-    setIsModalOpen(false)
-  }, [])
-
-  // Filter out the questions that have already been asked
-  const getUnaskedQuestions = useCallback(() => {
-    const askedQuestions = messages.filter((msg) => msg.role === "user").map((msg) => msg.text)
-    return predefinedQuestions.filter((item) => !askedQuestions.includes(item.question))
-  }, [messages, predefinedQuestions])
+  const unaskedQuestions = getUnaskedQuestions()
 
   return (
     <div className="flex flex-col h-full w-full overflow-hidden">
-      {/* Fixed Header */}
-      <div className="bg-green-700 text-white py-2 px-3 sm:py-3 sm:px-6 md:py-4 md:px-8 border-b border-green-800 flex-shrink-0">
+      {/* Header */}
+      <div className="px-5 py-4 border-b border-emerald-200 dark:border-emerald-900/50 bg-white dark:bg-zinc-900 flex-shrink-0">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl sm:text-2xl md:text-3xl mx-auto font-bold text-center flex items-center gap-1 sm:gap-2 md:gap-3">
-            <Computer className="h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7" />
-            GraphAlgo Assistant
-          </h2>
-        </div>
-      </div>
-
-      {/* Scrollable Content Area */}
-      <div className="flex-grow overflow-hidden relative">
-        {error && (
-          <Alert variant="destructive" className="m-2 sm:m-4 md:m-7">
-            <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6" />
-            <AlertDescription className="text-sm sm:text-base md:text-lg">{error}</AlertDescription>
-          </Alert>
-        )}
-
-        <div className="h-full overflow-y-auto bg-green-50 dark:bg-gray-900 pb-4">
-          <div className="p-3 sm:p-4 md:p-6 lg:p-8">
-            {messages.length === 0 ? (
-              <div className="flex flex-col items-center justify-center text-center text-muted-foreground p-3 sm:p-6 md:p-8 lg:p-10">
-                <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl font-medium mb-1 sm:mb-2 md:mb-3 text-green-800 dark:text-green-300">
-                  Welcome to Graph-Algo Assistant
-                </h3>
-                <p className="text-sm sm:text-base md:text-lg lg:text-xl text-green-700 dark:text-green-400 max-w-2xl mx-auto">
-                  Ask me anything about Graph Algorithms !
-                </p>
-                <div className="mt-3 sm:mt-4 md:mt-6 lg:mt-8 space-y-2 md:space-y-3 w-full max-w-2xl">
-                  {predefinedQuestions.map((item, index) => (
-                    <Button
-                      key={index}
-                      variant="outline"
-                      onClick={() => handlePredefinedQuestionClick(item.question)}
-                      className="bg-green-100 hover:bg-green-200 dark:bg-green-900/50 dark:hover:bg-green-800/50 text-green-800 dark:text-green-200 border-green-300 dark:border-green-700 w-full text-left justify-start text-xs sm:text-sm md:text-base lg:text-lg py-2 px-3 md:py-3 md:px-4 h-auto min-h-[40px] md:min-h-[50px]"
-                    >
-                      {item.question}
-                    </Button>
-                  ))}
-                </div>
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-full bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center flex-shrink-0">
+              <GitGraph className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+            </div>
+            <div>
+              <h2 className="text-base font-bold text-zinc-900 dark:text-zinc-100 leading-tight">
+                GraphAlgo Assistant
+              </h2>
+              <div className="flex items-center gap-1.5 mt-0.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-xs font-medium text-emerald-600 dark:text-emerald-400">
+                  Online & Ready to help
+                </span>
               </div>
-            ) : (
-              <div className="space-y-3 sm:space-y-4 md:space-y-5 w-full max-w-4xl mx-auto">
-                {messages.map((msg, index) => (
-                  <div
-                    key={index}
-                    className={cn(
-                      "flex flex-col rounded-lg cursor-pointer transition-all hover:opacity-90 hover:shadow-md",
-                      "p-3 sm:p-4 md:p-5",
-                      msg.role === "user" ? "ml-auto bg-green-600 text-white" : "mr-auto bg-green-100 dark:bg-green-900/50 text-green-900 dark:text-green-100",
-                      "max-w-[85%] sm:max-w-[80%] md:max-w-[75%] lg:max-w-[70%]",
-                    )}
-                    onClick={() => handleMessageClick(msg)}
-                  >
-                    <div className="whitespace-pre-wrap text-sm sm:text-base md:text-lg">
-                      {msg.text.length > 150 ? `${msg.text.substring(0, 150)}...` : msg.text}
-                    </div>
-                    <div className="flex items-center justify-between mt-1 sm:mt-2 md:mt-3">
-                      <span
-                        className={cn(
-                          "text-[10px] sm:text-xs md:text-sm",
-                          msg.role === "user" ? "text-green-100" : "text-green-700 dark:text-green-400",
-                        )}
-                      >
-                        {msg.role === "model" && (
-                          <GraduationCap className="h-2 w-2 sm:h-3 sm:w-3 md:h-4 md:w-4 inline mr-1" />
-                        )}
-                        Click to expand
-                      </span>
-                      <span
-                        className={cn(
-                          "text-[10px] sm:text-xs md:text-sm",
-                          msg.role === "user" ? "text-green-100" : "text-green-700 dark:text-green-400",
-                        )}
-                      >
-                        {format(msg.timestamp, "h:mm a")}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-
-                {isLoading && (
-                  <div className="flex flex-col max-w-[85%] sm:max-w-[80%] md:max-w-[75%] lg:max-w-[70%] rounded-lg p-3 sm:p-4 md:p-5 mr-auto bg-green-100 dark:bg-green-900/50 text-green-900 dark:text-green-100">
-                    <div className="flex items-center gap-1 sm:gap-2 md:gap-3">
-                      <Loader2 className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5 animate-spin" />
-                      <span className="text-sm sm:text-base md:text-lg">Thinking...</span>
-                    </div>
-                  </div>
-                )}
-
-                {/* Show remaining questions after each bot response */}
-                {showSuggestions && messages.length > 0 && messages[messages.length - 1].role === "model" && (
-                  <div className="my-3 sm:my-4 md:my-5 p-2 sm:p-3 md:p-4 bg-green-50 dark:bg-gray-800 border border-green-200 dark:border-green-800 rounded-lg max-w-4xl mx-auto">
-                    <p className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-green-800 dark:text-green-300 mb-1 sm:mb-2 md:mb-3">
-                      You might also want to ask:
-                    </p>
-                    <div className="space-y-1.5 sm:space-y-2 md:space-y-3 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3">
-                      {getUnaskedQuestions()
-                        .slice(0, 4)
-                        .map((item, index) => (
-                          <Button
-                            key={index}
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handlePredefinedQuestionClick(item.question)}
-                            className="bg-white hover:bg-green-100 dark:bg-gray-700 dark:hover:bg-gray-600 text-green-800 dark:text-green-200 border-green-200 dark:border-green-700 w-full text-left justify-start text-xs sm:text-sm md:text-base py-1.5 px-2 md:py-2 md:px-3 h-auto min-h-[32px] md:min-h-[40px]"
-                          >
-                            {item.question}
-                          </Button>
-                        ))}
-                    </div>
-                  </div>
-                )}
-
-                <div ref={messagesEndRef} />
-              </div>
-            )}
+            </div>
           </div>
+          {onClose && (
+            <button
+              onClick={onClose}
+              className="p-1.5 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200"
+              aria-label="Close chat"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
+          )}
         </div>
       </div>
 
-      {/* Fixed Input Area */}
-      <div className="p-2 sm:p-3 md:p-4 lg:p-6 border-t border-green-200 dark:border-green-800 bg-green-50 dark:bg-gray-900 flex-shrink-0">
-        <div className="flex gap-1 sm:gap-2 md:gap-3 max-w-4xl mx-auto">
-          <Input
+      {/* Scrollable Content */}
+      <div className="flex-1 overflow-y-auto bg-emerald-50/50 dark:bg-zinc-950/50">
+        <div className="p-4">
+          {messages.length === 0 ? (
+            // Welcome state — FAQ cards
+            <div className="flex flex-col items-center">
+              <p className="text-sm text-center text-emerald-700 dark:text-emerald-300 mt-2 mb-5 px-4 leading-relaxed">
+                Ask me anything about graph algorithms, visualizations, code tracing, or the platform!
+              </p>
+
+              <div className="w-full space-y-1">
+                <p className="text-xs font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider mb-2 px-1">
+                  Frequently Asked Questions:
+                </p>
+                {PREDEFINED_QA.slice(0, 5).map((qa, i) => (
+                  <button
+                    key={i}
+                    onClick={() => handleQuestionClick(qa.question)}
+                    className="w-full text-left px-4 py-3 rounded-xl border border-emerald-200 dark:border-emerald-800/50 bg-white dark:bg-zinc-900/60 hover:border-emerald-400 dark:hover:border-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 transition-all duration-200 group"
+                  >
+                    <span className="text-sm text-zinc-700 dark:text-zinc-300 group-hover:text-emerald-700 dark:group-hover:text-emerald-300 transition-colors">
+                      {qa.question}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : (
+            // Conversation state
+            <div className="space-y-3">
+              {messages.map((msg, index) => (
+                <div
+                  key={index}
+                  className={cn(
+                    "flex",
+                    msg.role === "user" ? "justify-end" : "justify-start",
+                  )}
+                >
+                  <div
+                    className={cn(
+                      "max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed",
+                      msg.role === "user"
+                        ? "bg-emerald-600 text-white rounded-br-md"
+                        : "bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-700 rounded-bl-md shadow-sm",
+                    )}
+                  >
+                    {msg.role === "model" && (
+                      <div className="flex items-center gap-1.5 mb-1.5">
+                        <Bot className="h-3.5 w-3.5 text-emerald-500" />
+                        <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
+                          Assistant
+                        </span>
+                      </div>
+                    )}
+                    <div className="whitespace-pre-wrap">{msg.text}</div>
+                  </div>
+                </div>
+              ))}
+
+              {/* Loading indicator */}
+              {isLoading && (
+                <div className="flex justify-start">
+                  <div className="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-2xl rounded-bl-md px-4 py-3 shadow-sm">
+                    <div className="flex items-center gap-2">
+                      <Loader2 className="h-4 w-4 animate-spin text-emerald-500" />
+                      <span className="text-sm text-zinc-500 dark:text-zinc-400">Typing...</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Suggested follow-up questions */}
+              {showSuggestions && !isLoading && unaskedQuestions.length > 0 && messages.length > 0 && messages[messages.length - 1].role === "model" && (
+                <div className="pt-2">
+                  <p className="text-[10px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider mb-2 px-1">
+                    Related Questions:
+                  </p>
+                  <div className="space-y-1">
+                    {unaskedQuestions.slice(0, 3).map((qa, i) => (
+                      <button
+                        key={i}
+                        onClick={() => handleQuestionClick(qa.question)}
+                        className="w-full text-left px-3 py-2.5 rounded-xl border border-emerald-200/70 dark:border-emerald-800/40 bg-white/80 dark:bg-zinc-900/40 hover:border-emerald-400 dark:hover:border-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 transition-all text-xs text-zinc-600 dark:text-zinc-400 hover:text-emerald-700 dark:hover:text-emerald-300"
+                      >
+                        {qa.question}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div ref={messagesEndRef} />
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Input Area */}
+      <div className="p-3 border-t border-emerald-200 dark:border-emerald-900/50 bg-white dark:bg-zinc-900 flex-shrink-0">
+        <div className="flex items-center gap-2">
+          <input
             ref={inputRef}
             value={userInput}
             onChange={(e) => setUserInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Ask something about GUCC..."
-            disabled={isLoading || !sessionId}
-            className="flex-1 border-green-300 dark:border-green-700 focus-visible:ring-green-500 text-sm sm:text-base md:text-lg h-9 sm:h-10 md:h-12"
+            placeholder="Ask something about GraphAlgo..."
+            disabled={isLoading}
+            className={cn(
+              "flex-1 h-10 px-4 rounded-full text-sm",
+              "bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100",
+              "border-2 border-emerald-300 dark:border-emerald-700",
+              "focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-500",
+              "placeholder:text-zinc-400 dark:placeholder:text-zinc-500",
+              "disabled:opacity-50 transition-colors",
+            )}
           />
-          <Button
-            onClick={() => handleSendMessage()}
-            disabled={isLoading || !userInput.trim() || !sessionId}
-            size="icon"
-            className="bg-green-700 hover:bg-green-800 h-9 w-9 sm:h-10 sm:w-10 md:h-12 md:w-12"
+          <button
+            onClick={handleSendMessage}
+            disabled={isLoading || !userInput.trim()}
+            className={cn(
+              "h-10 w-10 rounded-full flex items-center justify-center flex-shrink-0 transition-all",
+              userInput.trim()
+                ? "bg-emerald-500 hover:bg-emerald-600 text-white shadow-md hover:shadow-lg"
+                : "bg-zinc-200 dark:bg-zinc-700 text-zinc-400 dark:text-zinc-500 cursor-not-allowed",
+            )}
           >
             {isLoading ? (
-              <Loader2 className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5 animate-spin" />
+              <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
-              <Send className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5" />
+              <Send className="h-4 w-4" />
             )}
-          </Button>
+          </button>
         </div>
       </div>
-
-      {/* Custom Modal */}
-      <MessageModal isOpen={isModalOpen} onClose={closeModal} message={selectedMessage} screenSize={screenSize} />
     </div>
   )
 }
