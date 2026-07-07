@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Facebook, Twitter, Instagram, Github, Mail } from "lucide-react"
+import { Github, Mail, Linkedin, Globe } from "lucide-react"
 
 export default function Footer() {
   return (
@@ -10,21 +10,24 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-4">
             <h3 className="text-lg font-bold text-zinc-900 dark:text-white">GraphAlgo</h3>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            <p className="text-sm text-zinc-550 dark:text-zinc-400">
               Visualize and learn graph algorithms with our interactive platform.
             </p>
             <div className="flex space-x-4">
-              <Button variant="ghost" size="icon" aria-label="Facebook" className="hover:bg-zinc-100 dark:hover:bg-zinc-900 text-zinc-600 dark:text-zinc-400">
-                <Facebook className="h-5 w-5" />
+              <Button variant="ghost" size="icon" aria-label="GitHub" asChild className="hover:bg-zinc-100 dark:hover:bg-zinc-900 text-zinc-600 dark:text-zinc-400">
+                <a href="https://github.com/imtiazahmadtanvir" target="_blank" rel="noopener noreferrer">
+                  <Github className="h-5 w-5" />
+                </a>
               </Button>
-              <Button variant="ghost" size="icon" aria-label="Twitter" className="hover:bg-zinc-100 dark:hover:bg-zinc-900 text-zinc-600 dark:text-zinc-400">
-                <Twitter className="h-5 w-5" />
+              <Button variant="ghost" size="icon" aria-label="LinkedIn" asChild className="hover:bg-zinc-100 dark:hover:bg-zinc-900 text-zinc-600 dark:text-zinc-400">
+                <a href="https://www.linkedin.com/in/imtiaz-tanveer07" target="_blank" rel="noopener noreferrer">
+                  <Linkedin className="h-5 w-5" />
+                </a>
               </Button>
-              <Button variant="ghost" size="icon" aria-label="Instagram" className="hover:bg-zinc-100 dark:hover:bg-zinc-900 text-zinc-600 dark:text-zinc-400">
-                <Instagram className="h-5 w-5" />
-              </Button>
-              <Button variant="ghost" size="icon" aria-label="GitHub" className="hover:bg-zinc-100 dark:hover:bg-zinc-900 text-zinc-600 dark:text-zinc-400">
-                <Github className="h-5 w-5" />
+              <Button variant="ghost" size="icon" aria-label="Portfolio" asChild className="hover:bg-zinc-100 dark:hover:bg-zinc-900 text-zinc-600 dark:text-zinc-400">
+                <a href="https://imtiaz-tanvir-portfolio.netlify.app/" target="_blank" rel="noopener noreferrer">
+                  <Globe className="h-5 w-5" />
+                </a>
               </Button>
             </div>
           </div>
@@ -85,7 +88,7 @@ export default function Footer() {
             <h3 className="text-lg font-bold text-zinc-900 dark:text-white">Contact Us</h3>
             <p className="text-sm text-zinc-550 dark:text-zinc-400">
               <Mail className="h-4 w-4 inline-block mr-2" />
-              imtiaztanveer07@gmail.com
+              imtiaz.tanvir.dev@gmail.com
             </p>
             <p className="text-sm text-zinc-550 dark:text-zinc-400">Stay updated with our latest algorithms and features.</p>
             <div className="flex space-x-2">

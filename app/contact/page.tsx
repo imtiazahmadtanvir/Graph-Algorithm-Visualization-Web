@@ -50,7 +50,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold">Email</h3>
-                    <p className="text-muted-foreground">imtiaztanveer07@gmail.com</p>
+                    <p className="text-muted-foreground">imtiaz.tanvir.dev@gmail.com</p>
                     <p className="text-muted-foreground">support@graphalgo.com</p>
                   </div>
                 </div>
