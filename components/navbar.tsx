@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Menu, Home as HomeIcon, Info, Network, Mail, Github, Linkedin, Globe } from "lucide-react"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet"
 
 export default function Navbar() {
   const pathname = usePathname()
@@ -39,7 +39,16 @@ export default function Navbar() {
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-2">
           <Link href="/" className="flex items-center space-x-2">
-            <span className="font-bold text-xl">GraphAlgo</span>
+            <div className="flex items-center gap-2.5 group">
+              <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 p-[1.5px] shadow-md shadow-emerald-500/10 transition-all duration-300 group-hover:scale-105 group-hover:rotate-6">
+                <div className="h-full w-full rounded-[10px] bg-zinc-950 flex items-center justify-center">
+                  <Network className="h-4.5 w-4.5 text-emerald-400 transition-transform duration-500 group-hover:scale-110" />
+                </div>
+              </div>
+              <span className="font-extrabold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-zinc-900 to-zinc-700 dark:from-white dark:to-zinc-300 group-hover:from-emerald-400 group-hover:to-teal-400 transition-all duration-300">
+                Graph<span className="text-emerald-500 dark:text-emerald-400">Algo</span>
+              </span>
+            </div>
           </Link>
         </div>
 
@@ -71,12 +80,21 @@ export default function Navbar() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="bg-zinc-950/95 border-l border-zinc-800/80 text-white backdrop-blur-xl w-[280px] sm:w-[350px]">
+              <SheetTitle className="sr-only">Menu</SheetTitle>
+              <SheetDescription className="sr-only">Navigation Menu</SheetDescription>
               {/* Header inside Sheet */}
               <div className="flex flex-col gap-1.5 pb-6 border-b border-zinc-800/60 mt-4">
-                <span className="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400">
-                  GraphAlgo
-                </span>
-                <span className="text-[10px] text-zinc-500 font-semibold uppercase tracking-wider">
+                <div className="flex items-center gap-2">
+                  <div className="h-8 w-8 rounded-lg bg-gradient-to-tr from-emerald-500 to-teal-400 p-[1px] shadow-sm shadow-emerald-500/10">
+                    <div className="h-full w-full rounded-[7px] bg-zinc-950 flex items-center justify-center">
+                      <Network className="h-3.5 w-3.5 text-emerald-400" />
+                    </div>
+                  </div>
+                  <span className="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400">
+                    GraphAlgo
+                  </span>
+                </div>
+                <span className="text-[10px] text-zinc-500 font-semibold uppercase tracking-wider pl-10">
                   Algorithm Visualizer
                 </span>
               </div>
