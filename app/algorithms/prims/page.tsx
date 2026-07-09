@@ -1,13 +1,13 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import GraphCanvas from "@/components/graph-canvas"
 import { prims } from "@/lib/algorithms/prims"
 import type { Node, Edge } from "@/types/graph"
-import { GitBranch, ArrowRight } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import AlgorithmDetails from "@/components/algorithm-details"
 
 export default function PrimsPage() {
   const [nodes, setNodes] = useState<Node[]>([])
@@ -102,35 +102,7 @@ export default function PrimsPage() {
         </div>
       )}
 
-      <Card className="border border-[#4ade80]/20">
-        <CardHeader className="flex flex-row items-center gap-4">
-          <div className="h-12 w-12 rounded-full bg-[#f0f9f0] dark:bg-black flex items-center justify-center">
-            <GitBranch className="h-6 w-6 text-[#4ade80]" />
-          </div>
-          <div>
-            <CardTitle>Prim's Minimum Spanning Tree Algorithm</CardTitle>
-            <CardDescription>
-              Prim's algorithm finds a minimum spanning tree for a weighted undirected graph.
-            </CardDescription>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <p>Prim's algorithm works by:</p>
-            <ul className="list-disc pl-6 space-y-2">
-              <li>Starting with a single vertex and growing the tree one edge at a time</li>
-              <li>
-                Always adding the minimum weight edge that connects a vertex in the tree to a vertex outside the tree
-              </li>
-              <li>Continuing until all vertices are included in the tree</li>
-            </ul>
-            <p>
-              A minimum spanning tree connects all vertices with the minimum total edge weight, which is useful for
-              network design, clustering, and approximation algorithms.
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+      <AlgorithmDetails algorithmId="prims" />
     </div>
   )
 }

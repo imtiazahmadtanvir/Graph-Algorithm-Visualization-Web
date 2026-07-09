@@ -1,13 +1,13 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import GraphCanvas from "@/components/graph-canvas"
 import { dijkstra } from "@/lib/algorithms/dijkstra"
 import type { Node, Edge } from "@/types/graph"
-import { Route, ArrowRight } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import AlgorithmDetails from "@/components/algorithm-details"
 
 export default function DijkstraPage() {
   const [nodes, setNodes] = useState<Node[]>([])
@@ -98,34 +98,7 @@ export default function DijkstraPage() {
         </div>
       )}
 
-      <Card className="border border-[#4ade80]/20">
-        <CardHeader className="flex flex-row items-center gap-4">
-          <div className="h-12 w-12 rounded-full bg-[#f0f9f0] dark:bg-black flex items-center justify-center">
-            <Route className="h-6 w-6 text-[#4ade80]" />
-          </div>
-          <div>
-            <CardTitle>Dijkstra's Algorithm</CardTitle>
-            <CardDescription>
-              Dijkstra's algorithm finds the shortest paths between nodes in a weighted graph.
-            </CardDescription>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <p>Dijkstra's algorithm works by:</p>
-            <ul className="list-disc pl-6 space-y-2">
-              <li>Maintaining a set of unvisited nodes and a distance value for each node</li>
-              <li>Initially setting the distance of the start node to 0 and all other nodes to infinity</li>
-              <li>Repeatedly selecting the unvisited node with the smallest distance</li>
-              <li>Updating the distances of its neighbors if a shorter path is found</li>
-              <li>Marking the current node as visited and continuing until the target is reached</li>
-            </ul>
-            <p>
-              Dijkstra's algorithm is guaranteed to find the shortest path in a graph with non-negative edge weights.
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+      <AlgorithmDetails algorithmId="dijkstra" />
     </div>
   )
 }

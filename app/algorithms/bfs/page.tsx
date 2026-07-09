@@ -1,0 +1,103 @@
+"use client"
+
+import { useState, useEffect } from "react"
+import GraphCanvas from "@/components/graph-canvas"
+import { bfs } from "@/lib/algorithms/bfs"
+import type { Node, Edge } from "@/types/graph"
+import { ArrowRight } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
+import AlgorithmDetails from "@/components/algorithm-details"
+
+export default function BFSPage() {
+  const [nodes, setNodes] = useState<Node[]>([])
+  const [edges, setEdges] = useState<Edge[]>([])
+
+  // Generate the graph once on component mount
+  useEffect(() => {
+    // Create a grid graph for BFS visualization
+    const gridSize = 5
+    const spacing = 80
+    const offsetX = 100
+    const offsetY = 100
+
+    const newNodes: Node[] = []
+    const newEdges: Edge[] = []
+
+    // Create nodes in a grid
+    for (let row = 0; row < gridSize; row++) {
+      for (let col = 0; col < gridSize; col++) {
+        const id = row * gridSize + col
+        newNodes.push({
+          id,
+          x: offsetX + col * spacing,
+          y: offsetY + row * spacing,
+          state: "default",
+        })
+      }
+    }
+
+    // Create edges (4-way connectivity)
+    for (let row = 0; row < gridSize; row++) {
+      for (let col = 0; col < gridSize; col++) {
+        const id = row * gridSize + col
+
+        // Connect to right neighbor
+        if (col < gridSize - 1) {
+          newEdges.push({
+            from: id,
+            to: id + 1,
+          })
+        }
+
+        // Connect to bottom neighbor
+        if (row < gridSize - 1) {
+          newEdges.push({
+            from: id,
+            to: id + gridSize,
+          })
+        }
+      }
+    }
+
+    // Add some random obstacles (by removing edges)
+    const edgesToRemove = Math.floor(newEdges.length * 0.2) // Remove 20% of edges
+    for (let i = 0; i < edgesToRemove; i++) {
+      const randomIndex = Math.floor(Math.random() * newEdges.length)
+      newEdges.splice(randomIndex, 1)
+    }
+
+    setNodes(newNodes)
+    setEdges(newEdges)
+  }, [])
+
+  return (
+    <div className="container py-10">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">Breadth-First Search (BFS)</h1>
+        <Button asChild variant="outline" className="border-[#4ade80]/50">
+          <Link href="/algorithms">
+            <ArrowRight className="mr-2 h-4 w-4 rotate-180" />
+            Back to Algorithms
+          </Link>
+        </Button>
+      </div>
+
+      {nodes.length > 0 && edges.length > 0 && (
+        <div className="mb-8">
+          <GraphCanvas
+            nodes={nodes}
+            edges={edges}
+            algorithm={bfs}
+            startNodeId={0}
+            endNodeId={nodes.length - 1}
+            directed={true}
+            algorithmName="bfs"
+          />
+        </div>
+      )}
+
+      <AlgorithmDetails algorithmId="bfs" />
+    </div>
+  )
+}

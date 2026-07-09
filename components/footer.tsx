@@ -73,32 +73,32 @@ export default function Footer() {
             <h3 className="text-sm font-bold tracking-wider uppercase text-zinc-800 dark:text-zinc-200">Algorithms</h3>
             <ul className="space-y-2.5">
               <li>
-                <Link href="/astar" className="text-sm text-zinc-500 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+                <Link href="/algorithms/astar" className="text-sm text-zinc-500 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
                   A* Pathfinding
                 </Link>
               </li>
               <li>
-                <Link href="/dfs" className="text-sm text-zinc-500 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+                <Link href="/algorithms/dfs" className="text-sm text-zinc-500 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
                   Depth-First Search
                 </Link>
               </li>
               <li>
-                <Link href="/bfs" className="text-sm text-zinc-500 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+                <Link href="/algorithms/bfs" className="text-sm text-zinc-500 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
                   Breadth-First Search
                 </Link>
               </li>
               <li>
-                <Link href="/dijkstra" className="text-sm text-zinc-500 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+                <Link href="/algorithms/dijkstra" className="text-sm text-zinc-500 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
                   Dijkstra's Algorithm
                 </Link>
               </li>
               <li>
-                <Link href="/prims" className="text-sm text-zinc-500 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+                <Link href="/algorithms/prims" className="text-sm text-zinc-500 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
                   Prim's MST
                 </Link>
               </li>
               <li>
-                <Link href="/graph-coloring" className="text-sm text-zinc-500 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+                <Link href="/algorithms/graph-coloring" className="text-sm text-zinc-500 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
                   Graph Coloring
                 </Link>
               </li>

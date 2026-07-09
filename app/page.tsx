@@ -368,7 +368,7 @@ export default function Home() {
     {
       title: "A* Pathfinding",
       description: "Uses coordinates and heuristics to plot the fastest obstacle-free course between nodes.",
-      href: "/astar",
+      href: "/algorithms/astar",
       icon: <GitGraph className="h-6 w-6 text-emerald-500 dark:text-emerald-400" />,
       svgPreview: (
         <svg viewBox="0 0 200 120" className="w-full h-full fill-none stroke-current stroke-[1.5] text-zinc-400 dark:text-zinc-600">
@@ -395,7 +395,7 @@ export default function Home() {
     {
       title: "Breadth-First Search (BFS)",
       description: "Traverses layered concentric rings of child nodes level-by-level.",
-      href: "/bfs",
+      href: "/algorithms/bfs",
       icon: <Network className="h-6 w-6 text-emerald-500 dark:text-emerald-400" />,
       svgPreview: (
         <svg viewBox="0 0 200 120" className="w-full h-full fill-none stroke-current stroke-[1.5] text-zinc-400 dark:text-zinc-600">
@@ -422,7 +422,7 @@ export default function Home() {
     {
       title: "Depth-First Search (DFS)",
       description: "Explores branches deeply down vertical paths before backtracking to branches.",
-      href: "/dfs",
+      href: "/algorithms/dfs",
       icon: <GitFork className="h-6 w-6 text-emerald-500 dark:text-emerald-400" />,
       svgPreview: (
         <svg viewBox="0 0 200 120" className="w-full h-full fill-none stroke-current stroke-[1.5] text-zinc-400 dark:text-zinc-600">
@@ -446,7 +446,7 @@ export default function Home() {
     {
       title: "Dijkstra's Algorithm",
       description: "Computes absolute shortest weighted route via cost sum accumulation.",
-      href: "/dijkstra",
+      href: "/algorithms/dijkstra",
       icon: <Route className="h-6 w-6 text-emerald-500 dark:text-emerald-400" />,
       svgPreview: (
         <svg viewBox="0 0 200 120" className="w-full h-full fill-none stroke-current stroke-[1.5] text-zinc-400 dark:text-zinc-600">

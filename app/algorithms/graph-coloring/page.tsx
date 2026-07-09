@@ -1,13 +1,13 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import GraphCanvas from "@/components/graph-canvas"
 import { graphColoring } from "@/lib/algorithms/graph-coloring"
 import type { Node, Edge } from "@/types/graph"
-import { Palette, ArrowRight } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import AlgorithmDetails from "@/components/algorithm-details"
 
 export default function GraphColoringPage() {
   const [nodes, setNodes] = useState<Node[]>([])
@@ -86,33 +86,7 @@ export default function GraphColoringPage() {
         </div>
       )}
 
-      <Card className="border border-[#4ade80]/20">
-        <CardHeader className="flex flex-row items-center gap-4">
-          <div className="h-12 w-12 rounded-full bg-[#f0f9f0] dark:bg-black flex items-center justify-center">
-            <Palette className="h-6 w-6 text-[#4ade80]" />
-          </div>
-          <div>
-            <CardTitle>Graph Coloring Algorithm</CardTitle>
-            <CardDescription>
-              Graph coloring assigns colors to vertices such that no adjacent vertices have the same color.
-            </CardDescription>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <p>Graph coloring works by:</p>
-            <ul className="list-disc pl-6 space-y-2">
-              <li>Processing vertices in a specific order (often by degree)</li>
-              <li>Assigning the smallest available color to each vertex</li>
-              <li>Ensuring no adjacent vertices have the same color</li>
-            </ul>
-            <p>
-              Graph coloring has applications in scheduling, register allocation in compilers, map coloring, and solving
-              Sudoku puzzles.
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+      <AlgorithmDetails algorithmId="graph-coloring" />
     </div>
   )
 }
