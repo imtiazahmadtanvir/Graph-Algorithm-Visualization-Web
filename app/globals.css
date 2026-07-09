@@ -187,3 +187,60 @@
   fill: #f97316;
   stroke: #f97316;
 }
+
+/* Prim's MST Animation */
+.svg-mst-edge-1 {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  transition: stroke-dashoffset 0.4s ease-in-out;
+}
+.group:hover .svg-mst-edge-1 {
+  stroke-dashoffset: 0;
+}
+.svg-mst-edge-2 {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  transition: stroke-dashoffset 0.4s ease-in-out;
+  transition-delay: 0.25s;
+}
+.group:hover .svg-mst-edge-2 {
+  stroke-dashoffset: 0;
+}
+.svg-mst-edge-3 {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  transition: stroke-dashoffset 0.4s ease-in-out;
+  transition-delay: 0.5s;
+}
+.group:hover .svg-mst-edge-3 {
+  stroke-dashoffset: 0;
+}
+.svg-mst-edge-4 {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  transition: stroke-dashoffset 0.4s ease-in-out;
+  transition-delay: 0.75s;
+}
+.group:hover .svg-mst-edge-4 {
+  stroke-dashoffset: 0;
+}
+
+/* Graph Coloring Animation */
+.svg-coloring-node {
+  transition: transform 0.3s ease, fill 0.3s ease;
+}
+.group:hover .svg-coloring-node {
+  transform: scale(1.35);
+}
+.svg-coloring-node-delay-1 {
+  transition-delay: 0.15s;
+}
+.svg-coloring-node-delay-2 {
+  transition-delay: 0.3s;
+}
+.svg-coloring-node-delay-3 {
+  transition-delay: 0.45s;
+}
+.svg-coloring-node-delay-4 {
+  transition-delay: 0.6s;
+}
