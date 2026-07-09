@@ -1,37 +1,52 @@
-# GrappAlgo - Graph Visualization & Analysis Platform
+# GraphAlgo - Interactive Graph Visualization & Analysis Platform
 
-GrappAlgo is an interactive, modern web application designed to help students, developers, and algorithm enthusiasts visualize, understand, and interact with complex graph algorithms. Built with a high-performance interactive canvas and a sleek user interface, users can run step-by-step simulations of classic pathfinding, traversal, and optimization algorithms.
+Welcome to **GraphAlgo** – a state-of-the-art interactive visualizer built to make graph algorithms intuitive, accessible, and engaging. 
+
+**🚀 Live Website:** [graph-algorithm-visualization.vercel.app](https://graph-algorithm-visualization.vercel.app/)  
+**🕸️ Algorithms Hub:** [graph-algorithm-visualization.vercel.app/algorithms](https://graph-algorithm-visualization.vercel.app/algorithms)
 
 ---
 
-## 🌟 Key Features & Pages
+## 🌟 What We Build
 
-The application is structured into specialized routes, each dedicated to visualizing a specific graph-based algorithm. Here is a breakdown of what each page does:
+GraphAlgo bridges the gap between abstract computer science theory and real-time execution. Instead of reading pseudocode on a page, GraphAlgo lets you run step-by-step visualizations on custom graph networks, complete with side-by-side code tracing and execution variables.
 
-### 1. 🟢 Graph Coloring (`/algorithms/graph-coloring`)
-* **What it does:** Assigns a color to each vertex (node) of a graph such that no two adjacent vertices share the same color.
-* **Key Concept:** Solves the vertex-coloring problem, striving to minimize the total number of colors used (chromatic number).
-* **Applications:** Scheduling, register allocation, compiler design, map coloring, and Sudoku solvers.
+### 1. Interactive Sandbox Canvas
+* **Custom Topology:** Add, delete, drag, and connect vertices dynamically on a responsive canvas.
+* **Edge Weights:** Assign custom weights to edges for pathfinding and minimum spanning tree simulations.
+* **Obstacle Creation:** Toggle nodes as active blocks to watch search algorithms navigate around grid obstacles in real-time.
 
-### 2. 🧭 A* Pathfinding (`/algorithms/astar`)
-* **What it does:** Visualizes the A* search algorithm, finding the shortest path between a starting node and a target node.
-* **Key Concept:** Uses a heuristic function ($f(n) = g(n) + h(n)$) to guide the search path efficiently.
+### 2. Real-Time Multilingual Code Visualizer
+* Trace the active line of code as the algorithm runs.
+* Select from 6 language formats: **JavaScript, C++, Java, Python, C, and C#**.
+* Watch line highlights adapt to each step of traversal.
 
-### 3. 🕸️ Breadth-First Search (`/algorithms/bfs`)
-* **What it does:** Explores the graph level-by-level, visiting all immediate neighbors of a node before moving deeper.
-* **Key Concept:** Guarantees finding the shortest path in unweighted graphs.
+### 3. Step Tracing Console
+* Detailed tracing console log output at the bottom of the screen.
+* Tells you exactly what the queue/stack/priority queue is holding, which nodes are being popped, and path updates.
 
-### 4. 🪵 Depth-First Search (`/algorithms/dfs`)
-* **What it does:** Traverses the graph by exploring as far as possible along each branch before backtracking.
-* **Key Concept:** Deep traversal using stack-based backtracking, useful for cycle detection and topological sorting.
+### 4. Smart Control Center
+* Toggles for Play, Pause, Step-Forward, and Step-Backward.
+* Speed slider to change node execution intervals from 1ms up to 100ms.
+* Preset graph patterns (grids, circular nodes, trees) generated on mount.
 
-### 5. ⚡ Dijkstra's Algorithm (`/algorithms/dijkstra`)
-* **What it does:** Finds the single-source shortest path in weighted graphs.
-* **Key Concept:** Employs a greedy strategy, picking the node with the minimum distance at each step.
+### 5. Floating AlgoBot Chatbot
+* An intelligent helper assistant in the bottom-right corner to help users understand complex graph terms, complexity values, and controls.
 
-### 6. 🌲 Prim's Algorithm (`/algorithms/prims`)
-* **What it does:** Computes the Minimum Spanning Tree (MST) of a weighted undirected graph.
-* **Key Concept:** Builds the tree one vertex at a time, always adding the cheapest edge from the tree to an unreached vertex.
+---
+
+## 📊 Supported Algorithms & Live Pages
+
+Here are the direct routes and definitions for all supported graph algorithms:
+
+| Algorithm | Live Path | Key Concepts | Real-World Application |
+| :--- | :--- | :--- | :--- |
+| **A* Pathfinding** | [🔗 `/algorithms/astar`](https://graph-algorithm-visualization.vercel.app/algorithms/astar) | Uses $f(n) = g(n) + h(n)$ coordinate distance heuristics for directed, fast path searches. | Video Game NPC pathing, autonomous vacuum robots. |
+| **Breadth-First Search (BFS)** | [🔗 `/algorithms/bfs`](https://graph-algorithm-visualization.vercel.app/algorithms/bfs) | Explores vertices level-by-level, ensuring shortest path in unweighted graphs. | LinkedIn connections, P2P network discovery. |
+| **Depth-First Search (DFS)** | [🔗 `/algorithms/dfs`](https://graph-algorithm-visualization.vercel.app/algorithms/dfs) | Navigates branches deeply down vertical paths before backtracking. | Maze solvers, compiler dependency sorting, cycle checks. |
+| **Dijkstra's Algorithm** | [🔗 `/algorithms/dijkstra`](https://graph-algorithm-visualization.vercel.app/algorithms/dijkstra) | Accumulates weighted costs to find the absolute shortest path in weighted graphs. | Google Maps driving routes, OSPF network routers. |
+| **Prim's MST** | [🔗 `/algorithms/prims`](https://graph-algorithm-visualization.vercel.app/algorithms/prims) | Connects all nodes using a greedy min-weight criteria with no cyclic loops. | Fiber-optic broadband layout, water pipeline grid laying. |
+| **Graph Coloring** | [🔗 `/algorithms/graph-coloring`](https://graph-algorithm-visualization.vercel.app/algorithms/graph-coloring) | Assigns colors to nodes so adjacent vertices never share duplicate categories. | Exam scheduling, compiler CPU register allocations. |
 
 ---
 
@@ -39,28 +54,13 @@ The application is structured into specialized routes, each dedicated to visuali
 
 This project is built using a modern, scalable web stack:
 
-### **Frontend Framework**
-* **Next.js 15 (React 19)**: Leveraging Server & Client Components for speed and responsiveness.
-* **TypeScript**: Strict type safety for data models (Nodes, Edges, Paths, and Graph States).
-
-### **Styling & UI Components**
-* **Tailwind CSS (v3)**: Utility-first CSS styling for highly custom, responsive layout grids.
-* **Radix UI Primitives**: Accessible UI component library (Accordion, Dialog, Select, Dropdown Menu, Navigation Menu, Slider, and Switch).
-* **Lucide React**: High-quality SVG icons for interactive visual cues.
-* **Sonner / React Toast**: Sleek micro-interaction notifications.
-
-### **Interactive Canvas & Charts**
-* **HTML5 Canvas / SVG Rendering**: Custom interactive canvas component for drawing nodes, connecting edges, and displaying path animations.
-* **Recharts**: For displaying performance comparison charts and metric tracking.
-* **vaul**: Smooth bottom-drawer sheets for controls on mobile screens.
-
-### **State & Data Validation**
-* **Zod**: Declarative schema validation.
-* **React Hook Form**: Form state management for customizing algorithm parameters (e.g. node weight, speed, heuristics).
-* **date-fns**: Time and date formatting.
-
-### **AI Integration**
-* **@google/generative-ai**: Google Gemini API integration for explanations and tutoring.
+* **Frontend:** Next.js 15 (React 19) utilizing both Server and Client Components.
+* **Type Safety:** TypeScript for structuring Nodes, Edges, Graph states, and Algorithms.
+* **Styling:** Tailwind CSS (v3) with dynamic CSS variables for full Dark Mode support.
+* **Interactive Layer:** HTML5 Canvas & Custom SVGs for smooth animations.
+* **UI Components:** Radix UI primitives (Accordion, Slider, Tabs, Dialog) styled via custom tailwind classes.
+* **Icons:** Lucide React.
+* **AI Integration:** Google Gemini API (`@google/generative-ai`) powering the AlgoBot Chatbot.
 
 ---
 
@@ -68,10 +68,10 @@ This project is built using a modern, scalable web stack:
 
 ### Prerequisites
 * **Node.js** (v18.0.0 or higher recommended)
-* **pnpm** (Package Manager)
+* **pnpm** or **npm** Package Manager
 
 ### Installation
-1. Clone the repository and navigate to the project directory:
+1. Clone the repository and navigate to the folder:
    ```bash
    cd Graph-Algorithm-Visualization-Web
    ```
@@ -80,15 +80,15 @@ This project is built using a modern, scalable web stack:
    pnpm install
    ```
 
-### Development Server
-Run the local development server:
+### Running Locally
+To launch the hot-reloading development server:
 ```bash
 pnpm dev
 ```
-Open [http://localhost:3000](http://localhost:3000) in your browser to explore the visualizer.
+Open [http://localhost:3000](http://localhost:3000) in your browser to view the application.
 
-### Production Build
-Build and optimize the application for production deployment:
+### Build and Deployment
+Build the Next.js bundle for production:
 ```bash
 pnpm build
 pnpm start
