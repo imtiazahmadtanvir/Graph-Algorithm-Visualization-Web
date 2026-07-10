@@ -4,7 +4,7 @@ import Link from "next/link"
 import { useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { GitGraph, GitFork, Palette, Network, Route, ArrowRight, User, Star, Code, ShieldCheck, HelpCircle } from "lucide-react"
+import { GitGraph, GitFork, Palette, Network, Route, ArrowRight, User, Star, Code, ShieldCheck, HelpCircle, BookOpen, MousePointerClick, Play, Sliders } from "lucide-react"
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion"
 
 // Live Canvas Traversal Simulation for the Hero Section
@@ -571,6 +571,111 @@ export default function Home() {
               <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
                 Add, remove, drag, and connect nodes in a weighted or unweighted canvas sandbox to model custom graph scenarios.
               </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works Section */}
+      <section className="py-16 sm:py-20 lg:py-24 border-b border-zinc-200 dark:border-zinc-900 bg-zinc-50/20 dark:bg-zinc-900/5 relative overflow-hidden">
+        {/* Decorative background glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-emerald-500/5 dark:bg-emerald-500/2 rounded-full blur-[120px] pointer-events-none z-0" />
+        
+        <div className="container max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+          <div className="text-center mb-12 sm:mb-16 space-y-4">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 rounded-full text-xs font-bold uppercase tracking-wider">
+              Quick Guide
+            </div>
+            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight">
+              How Does It Work?
+            </h2>
+            <p className="text-base sm:text-lg text-zinc-500 dark:text-zinc-400 max-w-[700px] mx-auto">
+              Follow these simple steps to start visualizing, customizing, and mastering graph algorithms.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
+            {/* Connecting line for desktop */}
+            <div className="hidden md:block absolute top-[2.25rem] left-[12%] right-[12%] h-0.5 bg-gradient-to-r from-zinc-200 via-emerald-200 to-zinc-200 dark:from-zinc-800/80 dark:via-emerald-950/50 dark:to-zinc-800/80 z-0" />
+
+            {/* Step 1 */}
+            <div className="flex flex-col items-center text-center space-y-4 group relative z-10">
+              <div className="relative">
+                <div className="w-16 h-16 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/80 flex items-center justify-center shadow-lg group-hover:border-emerald-500 dark:group-hover:border-emerald-500/60 transition-all duration-300 group-hover:-translate-y-1">
+                  <BookOpen className="w-7 h-7 text-zinc-700 dark:text-zinc-300 group-hover:text-emerald-500 dark:group-hover:text-emerald-400 transition-colors" />
+                </div>
+                <div className="absolute -top-2.5 -right-2.5 w-7 h-7 rounded-full bg-emerald-500 text-white dark:text-zinc-950 flex items-center justify-center text-xs font-extrabold border-2 border-white dark:border-zinc-950 shadow-md">
+                  1
+                </div>
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-lg font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                  Select Algorithm
+                </h3>
+                <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-[220px] mx-auto">
+                  Pick from pathfinding (A*, Dijkstra) or traversal (BFS, DFS) algorithms to load the workspace.
+                </p>
+              </div>
+            </div>
+
+            {/* Step 2 */}
+            <div className="flex flex-col items-center text-center space-y-4 group relative z-10">
+              <div className="relative">
+                <div className="w-16 h-16 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/80 flex items-center justify-center shadow-lg group-hover:border-emerald-500 dark:group-hover:border-emerald-500/60 transition-all duration-300 group-hover:-translate-y-1">
+                  <MousePointerClick className="w-7 h-7 text-zinc-700 dark:text-zinc-300 group-hover:text-emerald-500 dark:group-hover:text-emerald-400 transition-colors" />
+                </div>
+                <div className="absolute -top-2.5 -right-2.5 w-7 h-7 rounded-full bg-emerald-500 text-white dark:text-zinc-950 flex items-center justify-center text-xs font-extrabold border-2 border-white dark:border-zinc-950 shadow-md">
+                  2
+                </div>
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-lg font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                  Build Your Graph
+                </h3>
+                <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-[220px] mx-auto">
+                  Click on the canvas sandbox to add nodes, drag them, and build custom topological paths.
+                </p>
+              </div>
+            </div>
+
+            {/* Step 3 */}
+            <div className="flex flex-col items-center text-center space-y-4 group relative z-10">
+              <div className="relative">
+                <div className="w-16 h-16 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/80 flex items-center justify-center shadow-lg group-hover:border-emerald-500 dark:group-hover:border-emerald-500/60 transition-all duration-300 group-hover:-translate-y-1">
+                  <Play className="w-7 h-7 text-zinc-700 dark:text-zinc-300 group-hover:text-emerald-500 dark:group-hover:text-emerald-400 transition-colors" />
+                </div>
+                <div className="absolute -top-2.5 -right-2.5 w-7 h-7 rounded-full bg-emerald-500 text-white dark:text-zinc-950 flex items-center justify-center text-xs font-extrabold border-2 border-white dark:border-zinc-950 shadow-md">
+                  3
+                </div>
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-lg font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                  Run Traversal
+                </h3>
+                <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-[220px] mx-auto">
+                  Play the traversal simulation. Adjust speed sliders, pause, or step through node activations.
+                </p>
+              </div>
+            </div>
+
+            {/* Step 4 */}
+            <div className="flex flex-col items-center text-center space-y-4 group relative z-10">
+              <div className="relative">
+                <div className="w-16 h-16 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/80 flex items-center justify-center shadow-lg group-hover:border-emerald-500 dark:group-hover:border-emerald-500/60 transition-all duration-300 group-hover:-translate-y-1">
+                  <Sliders className="w-7 h-7 text-zinc-700 dark:text-zinc-300 group-hover:text-emerald-500 dark:group-hover:text-emerald-400 transition-colors" />
+                </div>
+                <div className="absolute -top-2.5 -right-2.5 w-7 h-7 rounded-full bg-emerald-500 text-white dark:text-zinc-950 flex items-center justify-center text-xs font-extrabold border-2 border-white dark:border-zinc-950 shadow-md">
+                  4
+                </div>
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-lg font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                  Trace Variables
+                </h3>
+                <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-[220px] mx-auto">
+                  Compare execution state variables across C++, Java, Python, C#, and JavaScript side-by-side.
+                </p>
+              </div>
             </div>
           </div>
         </div>
